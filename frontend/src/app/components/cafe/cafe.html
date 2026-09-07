@@ -1,0 +1,30 @@
+<div class="cafe-wrapper">
+    <main class="container">
+        <form id="upload-form" (submit)="$event.preventDefault(); onSubmit()">
+            <h1>Subir imagen de planta de café</h1>
+            
+            <label for="file">Elige una imagen:</label>
+            <input type="file" id="file" name="file" accept="image/*" required (change)="onFileSelected($event)">
+            
+            <button type="submit">Subir imagen</button>
+            
+            <div id="image-preview">
+                <img *ngIf="imagePreviewUrl" [src]="imagePreviewUrl" alt="Image Preview" id="preview">
+            </div>
+
+            <!-- Mensaje de cargando -->
+            <div class="result" *ngIf="cargando">
+                <p>Analizando la imagen, por favor espera...</p>
+            </div>
+
+            <!-- Aquí se mostrará el resultado de la IA -->
+            <div class="result" *ngIf="resultadoIA">
+                <p>Resultado: <strong>{{ resultadoIA }}</strong></p>
+            </div>
+        </form>
+    </main>
+
+    <footer>
+        <button class="back-button" routerLink="/dashboard"><strong>REGRESAR</strong></button>
+    </footer>
+</div>

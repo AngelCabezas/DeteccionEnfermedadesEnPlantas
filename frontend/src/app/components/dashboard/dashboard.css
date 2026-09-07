@@ -1,0 +1,264 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;800&display=swap");
+
+/* =========================================
+   1. CONTENEDOR PRINCIPAL (Sin Scroll)
+   ========================================= */
+.dashboard-wrapper {
+    font-family: 'Poppins', sans-serif;
+    background-color: #f5f5f5;
+    height: 100vh;
+    width: 100vw;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden; 
+}
+
+/* ==================
+   2. ENCABEZADO Y NAVEGACIÓN
+================== */
+.dashboard-header {
+    background-image: url('/img/header-index.jpg'); 
+    background-size: cover;
+    background-position: center;
+    color: white;
+    text-align: center;
+    padding: 3vh 2vw 2vh 2vw; /* Ajustado para hacer espacio al menú */
+    flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+}
+
+.dashboard-header h1 {
+    font-size: clamp(24px, 3vw, 36px);
+    margin: 0 0 1vh 0;
+    font-weight: 600;
+}
+
+.dashboard-header p {
+    font-size: clamp(13px, 1.2vw, 16px);
+    margin: 0 0 1.5vh 0;
+}
+
+/* El menú que había borrado :) */
+nav ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+nav ul li {
+    display: inline;
+    margin: 0 15px;
+}
+
+nav ul li a {
+    color: white;
+    text-decoration: none;
+    font-size: clamp(12px, 1.2vw, 14px);
+    transition: color 0.3s;
+}
+
+nav ul li a:hover {
+    text-decoration: underline;
+    color: #e0e0e0;
+}
+
+/* ==================
+   3. TARJETAS (CARTAS)
+================== */
+.cards-container {
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    flex-grow: 1;
+    padding: 2vh 2vw;
+    gap: 2vw;
+    background-color: #f5f5f5; 
+}
+
+.disease-card {
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.4); /* La sombra exacta que tenías */
+    text-align: center;
+    padding: 2vh 1.5vw;
+    width: 30%;
+    max-width: 450px;
+    height: 68vh; /* Se adapta para encajar */
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.disease-card h2 {
+    color: #333;
+    font-size: clamp(16px, 1.5vw, 20px);
+    margin: 0 0 1vh 0;
+    font-weight: 600;
+}
+
+.disease-card img {
+    width: 95%; /* Manteniendo tu 95% original */
+    height: 35vh; /* Crece dinámicamente con la pantalla */
+    object-fit: cover;
+    border-radius: 10px;
+    margin-bottom: 1vh;
+}
+
+.disease-card p {
+    color: #333;
+    font-size: clamp(12px, 1vw, 14px);
+    text-align: justify;
+    margin: 0 10px 1.5vh 10px;
+    line-height: 1.4;
+}
+
+.disease-card:hover {
+    transform: translateY(-10px); /* Hace que la tarjeta suba */
+    box-shadow: 0 15px 25px rgba(0, 0, 0, 0.4); /* Sombra más grande para dar efecto 3D */
+}
+
+.boton-enfermedad {
+    background-color: #6f0404; /* El color rojo original que elegiste */
+    color: white;
+    border: none;
+    padding: 1vh 2vw;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: clamp(12px, 1.2vw, 15px);
+    font-weight: bold;
+    width: clamp(100px, 40%, 150px);
+    min-height: 40px;
+    transition: background-color 0.3s;
+}
+
+.boton-enfermedad:hover {
+    background-color: #9f1212;
+}
+
+/* ==================
+   4. FOOTER
+================== */
+.dashboard-footer {
+    background-color: #333;
+    color: white;
+    text-align: center;
+    padding: 1vh 0;
+    flex-shrink: 0;
+    width: 100%;
+}
+
+.dashboard-footer p {
+    margin: 0;
+    font-size: 13px;
+}
+
+/* ==================
+   5. MÓVILES (Scroll necesario solo en celulares)
+================== */
+@media (max-width: 900px) {
+    .dashboard-wrapper {
+        height: auto;
+        min-height: 100vh;
+        overflow-y: auto; 
+    }
+    .cards-container {
+        flex-direction: column;
+        padding: 4vh 2vw;
+    }
+    .disease-card {
+        width: 95%;
+        height: auto;
+        margin-bottom: 2vh;
+    }
+    .disease-card img {
+        height: 250px;
+    }
+    nav ul li {
+        display: block; /* El menú se apila hacia abajo en el celular */
+        margin: 5px 0;
+    }
+}
+
+/* ==================
+   CLASES PARA LAS NUEVAS SECCIONES (About, Contact, Guide)
+================== */
+.content-area {
+    display: flex;
+    flex-grow: 1;
+    overflow: hidden; /* Cero scroll */
+}
+
+.info-card-container {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 1vh 1vw;
+    background-color: #f5f5f5;
+}
+
+.info-card {
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+    padding: 4vh 4vw;
+    width: 90%;
+    max-width: 750px;
+    max-height: 65vh; /* Evita que crezca más allá de la pantalla */
+    overflow-y: auto; /* Solo habilita scroll DENTRO de la cajita si el texto es muy largo */
+}
+
+.info-card h2 {
+    color: #333;
+    font-size: clamp(24px, 2.5vw, 30px);
+    margin-top: 0;
+    margin-bottom: 2vh;
+    text-align: center;
+    font-weight: bold;
+}
+
+.info-card p {
+    color: #444;
+    font-size: clamp(13px, 1.2vw, 15px);
+    line-height: 1.6;
+    text-align: justify;
+    margin-bottom: 1.5vh;
+}
+
+.contact-flex {
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    margin-top: 2vh;
+}
+
+.contact-text p {
+    text-align: left; /* Alineado a la izquierda para mejor lectura de datos */
+}
+
+.contact-logo {
+    width: clamp(120px, 15vw, 200px);
+    height: auto;
+    object-fit: contain;
+}
+
+.guide-card p {
+    text-align: left;
+    margin-left: 2vw; /* Pequeña sangría para los pasos */
+}
+
+/* Posiciona el botón de cerrar sesión en la esquina superior derecha */
+.logout-btn {
+    position: absolute;
+    top: 50px;   /* Distancia desde arriba */
+    right: 30px; /* Distancia desde la derecha */
+    z-index: 10; /* Asegura que el botón se quede por encima del fondo */
+    box-shadow: 0 4px 6px rgba(0,0,0,0.3); /* Un pequeño sombreado para que resalte */
+}
+

@@ -1,0 +1,161 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* =========================================
+   1. CONTENEDOR PRINCIPAL (100% de la pantalla)
+   ========================================= */
+.home-wrapper {
+    font-family: 'Arial', sans-serif;
+    background-color: #14522f;
+    color: white;
+    background-image: url('/img/fondoInicio.png'); 
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    
+    /* BLOQUEAMOS EL SCROLL */
+    height: 100vh; /* Altura exacta de 1 pantalla */
+    width: 100vw;
+    overflow: hidden; /* Cero barras de desplazamiento */
+    
+    display: flex;
+    flex-direction: column;
+}
+
+/* =========================================
+   2. BARRA DE NAVEGACIÓN
+   ========================================= */
+.navbar {
+    display: flex;
+    justify-content: flex-end;
+    width: 100%;
+    padding: 2vh 2vw; /* Usamos % de la pantalla (vh/vw) en vez de px fijos */
+    gap: 15px; 
+    flex-shrink: 0; /* Evita que el menú se aplaste */
+}
+
+.lang-button, .login-button {
+    background-color: #186525;
+    color: white;
+    border-radius: 8px;
+    padding: 1.5vh 2vw; /* Áreas táctiles relativas a la pantalla */
+    cursor: pointer;
+    font-size: clamp(12px, 1.2vw, 14px); /* Texto adaptable */
+    border: 1px solid transparent; 
+    transition: all 0.3s ease;
+}
+
+.login-button {
+    font-weight: bold;
+}
+
+/* UX: Indicadores claros de interacción */
+.lang-button:hover, .login-button:hover, .info-button:hover {
+    background-color: #580505;
+}
+
+.lang-button:focus, .login-button:focus, .info-button:focus {
+    outline: 3px solid #ffffff; 
+    outline-offset: 2px;
+}
+
+/* =========================================
+   3. SECCIÓN PRINCIPAL
+   ========================================= */
+.main-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    flex-grow: 1; /* Toma el espacio restante */
+    text-align: center;
+    padding: 1vh 2vw 3vh 2vw;
+    min-height: 0; /* Clave en flexbox para evitar desborde hacia abajo */
+}
+
+.logo-container {
+    margin-bottom: 2vh;
+    display: flex;
+    justify-content: center;
+    /* Limitamos la altura del logo al 35% del espacio para que no rompa el diseño */
+    height: 35vh; 
+}
+
+.logo {
+    width: auto;
+    height: 100%; /* Crece hasta el límite de su contenedor (35vh) */
+    max-width: 90vw; /* Evita que sea gigante en celulares */
+    object-fit: contain;
+}
+
+/* =========================================
+   4. CAJA DE TEXTO Y BOTÓN
+   ========================================= */
+.texto {
+    border-radius: 30px;
+    background-color: rgba(40, 37, 37, 0.4); 
+    padding: 3vh 3vw; /* Padding relativo */
+    max-width: 800px;
+    width: 90%; 
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+h1 {
+    font-size: clamp(24px, 4vw, 50px); 
+    letter-spacing: 2px;
+    font-weight: bold;
+    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.8);
+    margin-bottom: 1vh;
+}
+
+h2 {
+    font-size: clamp(16px, 2.5vw, 28px);
+    margin-bottom: 1.5vh;
+    font-weight: lighter;
+    line-height: 1.4;
+    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.8);
+}
+
+p {
+    font-size: clamp(12px, 1.5vw, 18px);
+    margin-bottom: 1.5vh;
+    font-weight: normal;
+    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.8);
+    margin: 0; /* Limpiamos márgenes extra al final */
+}
+
+.info-button {
+    background-color: #186525;
+    color: white;
+    border-radius: 8px;
+    padding: 2vh 4vw; /* Botón adaptable */
+    cursor: pointer;
+    font-size: clamp(14px, 1.8vw, 18px);
+    font-weight: bold;
+    border: none;
+    margin-top: 3vh;
+    transition: background-color 0.3s ease;
+}
+
+/* =========================================
+   5. MEDIA QUERIES (Móviles)
+   ========================================= */
+@media (max-width: 768px) {
+    .navbar {
+        justify-content: center; 
+    }
+    
+    .texto {
+        padding: 2vh 4vw;
+    }
+    
+    .info-button {
+        width: 100%; 
+        max-width: 300px;
+    }
+}

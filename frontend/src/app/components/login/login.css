@@ -1,0 +1,162 @@
+/* =========================================
+   1. CONTENEDOR PRINCIPAL
+   ========================================= */
+.login-wrapper {
+    background-image: url('/img/fondoLogin.png');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    height: 100vh; /* Alto exacto de la pantalla */
+    width: 100vw;  /* Ancho exacto de la pantalla */
+    display: flex;
+    flex-direction: column;
+    margin: 0;
+    padding: 0;
+    overflow: hidden; /* ¡Esto elimina el scroll de raíz! */
+}
+
+/* =========================================
+   2. ENCABEZADO RESPONSIVO
+   ========================================= */
+.header-container {
+    padding: 20px;
+    position: relative; 
+}
+
+.button-return {
+    background-color: #28a745;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 5px;
+    font-weight: bold;
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    z-index: 10;
+    transition: background-color 0.3s, transform 0.2s;
+}
+
+.button-return:hover {
+    background-color: #218838;
+    transform: scale(1.05);
+}
+
+.logos-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap; 
+    gap: 20px;
+    width: 100%;
+    padding-top: 80px; 
+}
+
+.header-text {
+    color: #ffffff;
+    font-size: clamp(24px, 4vw, 40px);
+    font-weight: bold;
+    margin: 0;
+    text-shadow: 2px 2px 5px rgba(0,0,0,0.8);
+    text-align: center;
+}
+
+/* =========================================
+   3. TARJETA DE LOGIN Y ANIMACIÓN SLIDER
+   ========================================= */
+.main-content {
+    flex-grow: 1; 
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+.Caja {
+    background-color: rgba(30, 30, 30, 0.85); 
+    width: 100%;
+    max-width: 400px; 
+    /* MODIFICACIÓN: Quitamos el padding horizontal de la caja para el slider */
+    padding: 40px 0; 
+    border-radius: 15px;
+    border: 1px solid rgba(255,255,255,0.1);
+    
+    /* MODIFICACIÓN: Fundamental para el efecto de slider */
+    overflow: hidden; 
+    position: relative;
+}
+
+/* Pista que contiene ambos formularios (mide el doble) */
+.forms-slider {
+    display: flex;
+    width: 200%;
+    transition: transform 0.5s ease-in-out;
+}
+
+/* Activa el movimiento hacia el Registro */
+.forms-slider.show-register {
+    transform: translateX(-50%);
+}
+
+/* Cada formulario ocupa el 50% de la pista y recupera el padding lateral */
+.auth-form {
+    width: 50%;
+    padding: 0 30px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    box-sizing: border-box; /* ¡Clave! Evita que el padding sume tamaño extra */
+}
+
+.blanco {
+    color: white;
+    font-weight: bold;
+}
+
+.form-control:focus {
+    border-color: #28a745;
+    box-shadow: 0 0 0 0.25rem rgba(40, 167, 69, 0.25);
+}
+
+.btn-ingresar {
+    font-size: 1.1rem;
+    padding: 12px;
+    border-radius: 8px;
+    font-weight: bold;
+    letter-spacing: 1px;
+}
+
+/* Estilos para el texto inferior de cambio */
+.switch-text {
+    color: #cccccc;
+    font-size: 0.9rem;
+}
+
+.switch-text a {
+    color: #28a745;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+.switch-text a:hover {
+    color: #218838;
+    text-decoration: underline;
+}
+
+/* =========================================
+   4. MEDIA QUERIES (MÓVILES)
+   ========================================= */
+@media (max-width: 600px) {
+    .logos-wrapper {
+        flex-direction: column; 
+        gap: 10px;
+    }
+    
+    .Caja {
+        padding: 30px 0;
+    }
+    
+    .auth-form {
+        padding: 0 20px;
+    }
+}

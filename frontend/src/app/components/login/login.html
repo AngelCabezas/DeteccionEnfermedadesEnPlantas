@@ -1,0 +1,74 @@
+<div class="login-wrapper">
+    <!-- Encabezado Responsivo -->
+    <header class="header-container">
+        <button class="button-return" routerLink="/home">HOME</button>
+        <div class="logos-wrapper">
+            <h2 class="header-text">Plant Disease Detector IA</h2>
+        </div>
+    </header>
+
+    <!-- Contenido principal centrado -->
+    <main class="main-content">
+        <!-- Tarjeta del formulario (La "Caja") con overflow oculto para el slider -->
+        <div class="Caja shadow animate__animated animate__zoomIn">
+            
+            <!-- Pista de deslizamiento que contiene ambos formularios -->
+            <div class="forms-slider" [class.show-register]="!isLoginMode">
+                
+                <!-- =====================
+                     FORMULARIO 1: LOGIN 
+                     ===================== -->
+                <form class="auth-form text-center" (submit)="onLogin($event)">
+                    <h1 class="text-white mb-4">Login</h1>
+
+                    <div class="mb-3 text-start w-100">
+                        <label for="usuario" class="blanco">Correo electrónico:</label>
+                        <input type="email" name="loginEmail" [(ngModel)]="loginEmail" placeholder="Ingrese su correo" class="form-control" required>
+                    </div>
+                    
+                    <div class="mb-3 text-start w-100">
+                        <label for="password" class="blanco">Contraseña:</label>
+                        <input type="password" name="loginPassword" [(ngModel)]="loginPassword" placeholder="Ingrese su contraseña" class="form-control" required>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-success w-100 mt-3 btn-ingresar">Ingresar</button>
+                    
+                    <!-- Botón para cambiar a registro -->
+                    <p class="switch-text mt-3">
+                        ¿No tienes cuenta? <a href="javascript:void(0)" (click)="toggleMode()">Regístrate aquí</a>
+                    </p>
+                </form>
+
+                <!-- =====================
+                     FORMULARIO 2: REGISTRO 
+                     ===================== -->
+                <form class="auth-form text-center" (submit)="onRegister($event)">
+                    <h1 class="text-white mb-4">Registro</h1>
+
+                    <div class="mb-3 text-start w-100">
+                        <label class="blanco">Usuario:</label>
+                        <input type="text" name="regUsuario" [(ngModel)]="regUsuario" placeholder="Cree su usuario" class="form-control" required>
+                    </div>
+
+                    <div class="mb-3 text-start w-100">
+                        <label class="blanco">Correo:</label>
+                        <input type="email" name="regEmail" [(ngModel)]="regEmail" placeholder="Ingrese su correo" class="form-control" required>
+                    </div>
+                    
+                    <div class="mb-3 text-start w-100">
+                        <label class="blanco">Contraseña:</label>
+                        <input type="password" name="regPassword" [(ngModel)]="regPassword" placeholder="Cree su contraseña (min. 6 caracteres)" class="form-control" required>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-success w-100 mt-3 btn-ingresar">Registrarse</button>
+                    
+                    <!-- Botón para regresar al login -->
+                    <p class="switch-text mt-3">
+                        ¿Ya tienes cuenta? <a href="javascript:void(0)" (click)="toggleMode()">Inicia sesión</a>
+                    </p>
+                </form>
+
+            </div>
+        </div>
+    </main>
+</div>

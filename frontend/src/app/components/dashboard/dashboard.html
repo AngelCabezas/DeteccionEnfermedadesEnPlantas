@@ -1,0 +1,118 @@
+<div class="dashboard-wrapper">
+    <header class="dashboard-header">
+        <!-- Coloca este botón donde prefieras en tu diseño del Dashboard -->
+        <button class="btn btn-danger font-weight-bold logout-btn" (click)="logout()">
+            Cerrar Sesión
+        </button>
+        <h1>Detector de enfermedades de plantas</h1>
+        <p>Identifique enfermedades en plantas de banano, arroz y café con nuestros modelos neuronales y obtenga resultados instantáneos.</p>
+        
+        <nav>
+            <ul>
+                <!-- Usamos (click) para llamar a la función de TypeScript -->
+                <li><a href="javascript:void(0)" (click)="cambiarSeccion('home')">Home</a></li>
+                <li><a href="javascript:void(0)" (click)="cambiarSeccion('guide')">Guia de uso</a></li>
+                <li><a href="javascript:void(0)" (click)="cambiarSeccion('about')">Acerca de nosotros</a></li>
+                <li><a href="javascript:void(0)" (click)="cambiarSeccion('contact')">Sobre el desarrollador</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main class="content-area">
+        
+        <!-- SECCIÓN 1: HOME (Tarjetas de Plantas) -->
+        <div class="cards-container" *ngIf="seccionActiva === 'home'">
+            <section class="disease-card">
+                <h2>Detección de enfermedades del banano</h2>
+                <img src="/img/bananaPlants.webp" alt="Banana">
+                <p>Detecta enfermedades comunes en cultivos de plátano como el sigatoka negra y el moko bacteriano.</p>
+                <button class="boton-enfermedad" routerLink="/banana">Explorar</button>
+            </section>
+            <section class="disease-card">
+                <h2>Detección de enfermedades del arroz</h2>
+                <img src="/img/ricePlants.webp" alt="Rice">
+                <p>Identifica problemas como el tizón del arroz o la mancha marrón.</p>
+                <button class="boton-enfermedad" routerLink="/arroz">Explorar</button>
+            </section>
+            <section class="disease-card">
+                <h2>Detección de enfermedades del cafe</h2>
+                <img src="/img/coffeePlants.webp" alt="Coffee">
+                <p>Diagnóstico de enfermedades del café, incluyendo la roya del café y la antracnosis.</p>
+                <button class="boton-enfermedad" routerLink="/cafe">Explorar</button>
+            </section>
+        </div>
+
+        <!-- SECCIÓN 2: ACERCA DE NOSOTROS -->
+        <div class="info-card-container" *ngIf="seccionActiva === 'about'">
+            <section class="info-card">
+                <h2>Sobre nosotros</h2>
+                <p>Nos dedicamos a ayudar a los agricultores a detectar y gestionar enfermedades de las plantas de manera eficiente y precisa. Para ello, hemos desarrollado una plataforma web que utiliza Inteligencia Artificial (IA) para diagnosticar la salud de tres cultivos clave: <strong>banano, arroz y café</strong>.</p>
+                
+                <p>A través de nuestra herramienta, los usuarios pueden cargar imágenes de las hojas de sus cultivos. Nuestra tecnología analiza rápidamente los patrones visuales para identificar posibles infecciones, permitiendo a los agricultores tomar decisiones oportunas que salven sus cosechas y optimicen sus recursos.</p>
+                
+                <div class="alert alert-warning mt-3" style="background-color: #fff3cd; color: #856404; padding: 15px; border-radius: 8px; border: 1px solid #ffeeba;">
+                    <strong>⚠️ Consideración importante sobre la IA:</strong><br>
+                    Nuestros modelos neuronales son altamente precisos diagnosticando enfermedades, pero asumen que la imagen proporcionada corresponde a la planta correcta. El sistema no diferencia especies de plantas por sí solo. Por ello, es vital asegurarse de utilizar el detector correspondiente a su cultivo para obtener resultados fiables.
+                </div>
+            </section>
+        </div>
+
+        <!-- SECCIÓN 3: CONTACTO Y PERFIL -->
+        <div class="info-card-container" *ngIf="seccionActiva === 'contact'">
+            <section class="info-card">
+                <h2>Desarrollador del Proyecto</h2>
+                
+                <div class="contact-profile mt-4">
+
+                    <h3 style="color: #2c3e50; margin-bottom: 5px;">Angel Cabezas</h3>
+                    <h5 class="text-muted" style="font-size: 1rem; margin-bottom: 20px;">
+                        Ingeniero de Software | Escuela Politécnica Nacional (EPN)
+                    </h5>
+                    
+                    <p style="line-height: 1.6; margin-bottom: 20px;">
+                        Soy un Ingeniero de Software apasionado por el desarrollo de soluciones tecnológicas que generen un impacto real. Este proyecto nació como una iniciativa de investigación académica que posteriormente escalé y modernicé, implementando una arquitectura Full-Stack con <strong>Angular 17</strong> en el Frontend y <strong>Python (Flask)</strong> en el Backend para el despliegue de modelos de Inteligencia Artificial.
+                    </p>
+                    
+                    <p style="line-height: 1.6; margin-bottom: 25px;">
+                        Me especializo en el desarrollo web moderno, la integración de tecnologías emergentes y la aplicación de buenas prácticas de ingeniería de software. ¡Conecta conmigo!
+                    </p>
+
+                    <div class="contact-links" style="display: flex; gap: 20px; flex-wrap: wrap;">
+                        <a href="mailto:angelcabezas1999@gmail.com" class="btn btn-outline-dark">
+                            ✉️ Correo Electrónico
+                        </a>
+                        <!-- Reemplaza el # con tu link real de LinkedIn -->
+                        <a href="https://www.linkedin.com/in/angel-cabezas-6065021a8" target="_blank" class="btn btn-outline-primary">
+                            💼 LinkedIn
+                        </a>
+                        <!-- Reemplaza el # con tu link real de GitHub -->
+                        <a href="https://github.com/AngelCabezas" target="_blank" class="btn btn-outline-secondary">
+                            💻 GitHub
+                        </a>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- SECCIÓN 4: GUÍA -->
+        <div class="info-card-container" *ngIf="seccionActiva === 'guide'">
+            <section class="info-card guide-card">
+                <h2>Guía de Uso</h2>
+                <p class="mb-4">Siga estos sencillos pasos para analizar sus cultivos y obtener un diagnóstico con Inteligencia Artificial:</p>
+                
+                <ol style="line-height: 1.8; text-align: left; padding-left: 20px;">
+                    <li><strong>Seleccionar el cultivo:</strong> En la pestaña principal (Home), haga clic en el botón "Explorar" de la planta que desea analizar (Banano, Arroz o Café).</li>
+                    <li><strong>Elegir la fotografía:</strong> Pulse "Elige una imagen" y seleccione una foto clara de la hoja. Los formatos admitidos son JPEG, PNG y WEBP.</li>
+                    <li><strong>Procesar la imagen:</strong> Haga clic en el botón "Subir imagen" para enviar el archivo a nuestro modelo de IA.</li>
+                    <li><strong>Obtener el diagnóstico:</strong> Espere un par de segundos; el resultado de la predicción aparecerá automáticamente en la parte inferior.</li>
+                    <li><strong>Nuevas consultas:</strong> Para evaluar otra hoja del mismo cultivo, simplemente repita desde el paso 2. Para cambiar a un cultivo diferente, pulse el botón <strong>"REGRESAR"</strong> al final de la página.</li>
+                </ol>
+            </section>
+        </div>
+
+    </main>
+
+    <footer class="dashboard-footer">
+        <p>&copy; 2026 Plant Disease Detector</p>
+    </footer>
+</div>

@@ -1,0 +1,33 @@
+<div class="banana-wrapper">
+    <main class="container">
+        <!-- Eliminamos el action a PHP. Angular ahora controla el formulario -->
+        <form id="upload-form" (submit)="$event.preventDefault(); onSubmit()">
+            <h1>Subir imagen de planta del banano</h1>
+            
+            <label for="file">Elige una imagen:</label>
+            <input type="file" id="file" name="file" accept="image/*" required (change)="onFileSelected($event)">
+            
+            <button type="submit">Subir imagen</button>
+            
+            <div id="image-preview">
+                <!-- El *ngIf muestra la etiqueta <img> SOLO cuando hay una imagen cargada -->
+                <img *ngIf="imagePreviewUrl" [src]="imagePreviewUrl" alt="Image Preview" id="preview">
+            </div>
+
+            <!-- Aquí se mostrará el resultado de la IA más adelante -->
+            <div class="result" *ngIf="cargando">
+                <p>Analizando con Inteligencia Artificial...</p>
+            </div>
+
+            <!-- Muestra el resultado final (en mayúsculas) -->
+            <div class="result" *ngIf="resultadoIA && !cargando">
+                <p>Diagnóstico: {{ resultadoIA | uppercase }}</p>
+            </div>
+        </form>
+    </main>
+
+    <footer>
+        <!-- Modificado para que te lleve al dashboard -->
+        <button class="back-button" routerLink="/dashboard"><strong>REGRESAR</strong></button>
+    </footer>
+</div>
