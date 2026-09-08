@@ -12,7 +12,7 @@ CORS(app) # Habilitamos CORS para Angular
 
 # --- 1. CONFIGURACIÓN DE RUTAS SEGURAS ---
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-banana_model_path = os.path.join(BASE_DIR, 'modelos', 'banana_leaf_disease_model.h5')
+banana_model_path = os.path.join(BASE_DIR, 'modelos', 'banana_leaf_disease_model.tflite')
 rice_model_path = os.path.join(BASE_DIR, 'modelos', 'arroz_modelo.pkl')
 # coffee_model_path = os.path.join(BASE_DIR, 'modelos', 'coffee_leaf_disease_model.h5')
 
@@ -27,7 +27,7 @@ def preprocess_image_banana(img_bytes, target_size=(224, 224)):
     img = cv2.resize(img, target_size)
     img = img / 255.0
     img = np.expand_dims(img, axis=0)
-    return img
+    return img.astype(np.float32)
 
 def preprocess_image(img_bytes, target_size=rice_fixed_size):
     img = cv2.imdecode(np.frombuffer(img_bytes, np.uint8), cv2.IMREAD_COLOR)
@@ -66,15 +66,28 @@ def Banana():
         img_bytes = file.read()
         img_array = preprocess_image_banana(img_bytes)
         
-        # LAZY LOADING: Cargamos el modelo solo aquí
-        banana_model = load_model(banana_model_path)
+        # --- LAZY LOADING CON TENSORFLOW LITE ---
+        import tensorflow as tf # Importamos tf solo cuando se necesita
         
-        prediction = banana_model.predict(img_array)
+        # 1. Cargamos el modelo ligero
+        interpreter = tf.lite.Interpreter(model_path=banana_model_path)
+        interpreter.allocate_tensors()
+        
+        # 2. Obtenemos las "puertas" de entrada y salida del modelo
+        input_details = interpreter.get_input_details()
+        output_details = interpreter.get_output_details()
+        
+        # 3. Le pasamos la imagen y hacemos la predicción
+        interpreter.set_tensor(input_details[0]['index'], img_array)
+        interpreter.invoke()
+        prediction = interpreter.get_tensor(output_details[0]['index'])
+        
+        # 4. Obtenemos el resultado
         predicted_class = np.argmax(prediction, axis=1)[0]
         result = banana_classes[predicted_class]
         
-        # LIMPIEZA DE MEMORIA RAM
-        del banana_model
+        # LIMPIEZA EXTREMA DE MEMORIA
+        del interpreter
         gc.collect()
         
         return jsonify({'prediction': result})
