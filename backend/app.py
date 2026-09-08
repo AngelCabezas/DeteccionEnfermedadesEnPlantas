@@ -5,7 +5,6 @@ from flask_cors import CORS
 import joblib
 import cv2
 import numpy as np
-from keras.models import load_model
 
 app = Flask(__name__)
 CORS(app) # Habilitamos CORS para Angular
