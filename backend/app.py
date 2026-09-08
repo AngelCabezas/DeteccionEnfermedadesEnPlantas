@@ -6,7 +6,7 @@ import numpy as np
 from keras.models import load_model
 
 # Cargar el modelo de banano al inicio
-banana_model_path = 'C:/Cursos/Angular/PlantDiseaseDetector/backend/modelos/banana_leaf_disease_model.h5'
+banana_model_path = 'modelos/banana_leaf_disease_model.h5'
 banana_model = load_model(banana_model_path)
 banana_classes = ['cordana', 'healthy', 'pestalotiopsis', 'sigatoka']
 
@@ -19,7 +19,7 @@ def preprocess_image_banana(img_bytes, target_size=(224, 224)):
     return img
 
 # Cargar el modelo de arroz al inicio
-rice_model_path = 'C:/Cursos/Angular/PlantDiseaseDetector/backend/modelos/arroz_modelo.pkl'
+rice_model_path = 'modelos/arroz_modelo.pkl'
 rice_model = joblib.load(rice_model_path)
 rice_fixed_size = (100, 100)
 rice_classes = ['Saludable', 'ManchaMarron', 'Tizon']
@@ -37,7 +37,7 @@ def preprocess_image(img_bytes, target_size=rice_fixed_size):
         raise ValueError('No se pudo procesar la imagen.')
 
 # Cargar el modelo del café al inicio
-coffee_model_path = 'C:/Cursos/Angular/PlantDiseaseDetector/backend/modelos/coffee_leaf_disease_model.h5'
+coffee_model_path = 'modelos/coffee_leaf_disease_model.h5'
 coffee_model = load_model(coffee_model_path)
 coffee_classes = ['healthy', 'miner', 'rust']
 
