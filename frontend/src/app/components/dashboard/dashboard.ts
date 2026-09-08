@@ -14,6 +14,7 @@ export class Dashboard {
   // Inyectamos la autenticación y el enrutador
   constructor(private auth: Auth, private router: Router) {}
 
+  cafeDisponible = false;
   // Función para cerrar sesión
   async logout() {
     try {

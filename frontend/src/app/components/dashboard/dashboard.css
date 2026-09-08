@@ -262,3 +262,50 @@ nav ul li a:hover {
     box-shadow: 0 4px 6px rgba(0,0,0,0.3); /* Un pequeño sombreado para que resalte */
 }
 
+/* Tarjeta deshabilitada */
+.disease-card--disabled {
+    position: relative;
+    opacity: 0.6;
+    cursor: not-allowed;
+    filter: grayscale(40%);
+}
+
+/* Evita el hover "levantado" en la tarjeta deshabilitada */
+.disease-card--disabled:hover {
+    transform: none;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.4);
+}
+
+/* Bloquea cualquier interacción con el contenido interno */
+.disease-card--disabled img,
+.disease-card--disabled p,
+.disease-card--disabled h2 {
+    pointer-events: none;
+    user-select: none;
+}
+
+/* Badge "En producción" */
+.badge-en-produccion {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    background-color: #ffc107;
+    color: #333;
+    font-size: 12px;
+    font-weight: bold;
+    padding: 4px 10px;
+    border-radius: 20px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+    z-index: 5;
+}
+
+/* Botón deshabilitado */
+.boton-enfermedad:disabled {
+    background-color: #999 !important;
+    cursor: not-allowed;
+    opacity: 0.7;
+}
+
+.boton-enfermedad:disabled:hover {
+    background-color: #999 !important;
+}

@@ -34,11 +34,17 @@
                 <p>Identifica problemas como el tizón del arroz o la mancha marrón.</p>
                 <button class="boton-enfermedad" routerLink="/arroz">Explorar</button>
             </section>
-            <section class="disease-card">
+            <section class="disease-card" [class.disease-card--disabled]="!cafeDisponible">
+                <div class="badge-en-produccion" *ngIf="!cafeDisponible">🚧 En producción</div>
                 <h2>Detección de enfermedades del cafe</h2>
                 <img src="/img/coffeePlants.webp" alt="Coffee">
                 <p>Diagnóstico de enfermedades del café, incluyendo la roya del café y la antracnosis.</p>
-                <button class="boton-enfermedad" routerLink="/cafe">Explorar</button>
+                <button 
+                    class="boton-enfermedad" 
+                    [disabled]="!cafeDisponible"
+                    [routerLink]="cafeDisponible ? '/cafe' : null">
+                    Explorar
+                </button>
             </section>
         </div>
 

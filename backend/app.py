@@ -37,17 +37,17 @@ def preprocess_image(img_bytes, target_size=rice_fixed_size):
         raise ValueError('No se pudo procesar la imagen.')
 
 # Cargar el modelo del café al inicio
-coffee_model_path = 'modelos/coffee_leaf_disease_model.h5'
-coffee_model = load_model(coffee_model_path)
-coffee_classes = ['healthy', 'miner', 'rust']
+#coffee_model_path = 'modelos/coffee_leaf_disease_model.h5'
+#coffee_model = load_model(coffee_model_path)
+#coffee_classes = ['healthy', 'miner', 'rust']
 
 # Cargar y preprocesar la imagen del café
-def preprocess_image_coffee(img_bytes, target_size=(224, 224)):
-    img = cv2.imdecode(np.frombuffer(img_bytes, np.uint8), cv2.IMREAD_COLOR)
-    img = cv2.resize(img, target_size)  # Redimensionar la imagen
-    img = img / 255.0  # Normalizar los pixeles (escala 0 - 1)
-    img = np.expand_dims(img, axis=0)  # Añadir la dimensión del batch
-    return img
+#def preprocess_image_coffee(img_bytes, target_size=(224, 224)):
+#    img = cv2.imdecode(np.frombuffer(img_bytes, np.uint8), cv2.IMREAD_COLOR)
+#    img = cv2.resize(img, target_size)  # Redimensionar la imagen
+#    img = img / 255.0  # Normalizar los pixeles (escala 0 - 1)
+#    img = np.expand_dims(img, axis=0)  # Añadir la dimensión del batch
+#    return img
 
 app = Flask(__name__)
 CORS(app) # Habilitamos CORS para Angular
@@ -97,22 +97,21 @@ def Arroz():
         return jsonify({'prediction': result})
 
 # 4. Ruta del Café (Solo POST)
-@app.route('/coffee-disease', methods=['POST'])
-def Cafe():
-    if 'file' not in request.files:
-        return jsonify({'error': 'No file part'}), 400
-
-    file = request.files['file']
-    if file.filename == '':
-        return jsonify({'error': 'No selected file'}), 400
-
-    if file:
-        img_bytes = file.read()
-        img_array = preprocess_image_coffee(img_bytes)
-        prediction = coffee_model.predict(img_array)
-        predicted_class = np.argmax(prediction, axis=1)[0]
-        result = coffee_classes[predicted_class]
-        return jsonify({'prediction': result})
-
+# @app.route('/coffee-disease', methods=['POST'])
+# def Cafe():
+#     if 'file' not in request.files:
+#         return jsonify({'error': 'No file part'}), 400
+#
+#     file = request.files['file']
+#     if file.filename == '':
+#         return jsonify({'error': 'No selected file'}), 400
+#
+#     if file:
+#         img_bytes = file.read()
+#         img_array = preprocess_image_coffee(img_bytes)
+#         prediction = coffee_model.predict(img_array)
+#         predicted_class = np.argmax(prediction, axis=1)[0]
+#         result = coffee_classes[predicted_class]
+#         return jsonify({'prediction': result})
 if __name__ == '__main__':
     app.run(debug=True)
