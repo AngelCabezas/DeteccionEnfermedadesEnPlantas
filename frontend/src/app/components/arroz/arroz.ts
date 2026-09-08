@@ -51,7 +51,7 @@ export class Arroz {
     formData.append('file', this.archivoSeleccionado);
 
     // ¡Apuntamos a la ruta del ARROZ!
-    this.http.post<any>('http://127.0.0.1:5000/rice-disease', formData)
+    this.http.post<any>('https://api-plantas-ia.onrender.com//rice-disease', formData)
       .subscribe({
         next: (respuesta) => {
           this.resultadoIA = respuesta.prediction; 

@@ -51,7 +51,7 @@ export class Cafe {
     formData.append('file', this.archivoSeleccionado);
 
     // ¡Apuntamos a la ruta del CAFÉ!
-    this.http.post<any>('http://127.0.0.1:5000/coffee-disease', formData)
+    this.http.post<any>('https://api-plantas-ia.onrender.com/coffee-disease', formData)
       .subscribe({
         next: (respuesta) => {
           this.resultadoIA = respuesta.prediction; 

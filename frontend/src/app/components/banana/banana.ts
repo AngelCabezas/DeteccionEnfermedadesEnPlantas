@@ -51,7 +51,7 @@ cargando: boolean = false;
     formData.append('file', this.archivoSeleccionado);
 
     // Hacemos el envío POST a tu servidor de Python
-    this.http.post<any>('http://127.0.0.1:5000/banana-disease', formData)
+    this.http.post<any>('https://api-plantas-ia.onrender.com/banana-disease', formData)
       .subscribe({
         next: (respuesta) => {
           // 'prediction' es la clave que envías desde tu return jsonify({'prediction': result})
