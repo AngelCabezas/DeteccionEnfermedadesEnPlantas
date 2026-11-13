@@ -1,0 +1,299 @@
+.det {
+  padding: var(--sp-5) 0 var(--sp-8);
+  min-height: calc(100vh - 64px);
+}
+
+/* ---------- Migas y cabecera ---------- */
+.det__crumbs {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  font-size: var(--text-sm);
+  color: var(--color-muted);
+  margin-bottom: var(--sp-4);
+}
+.det__crumbs a {
+  color: var(--color-primary-dark);
+  font-weight: 500;
+  text-decoration: none;
+}
+.det__crumbs a:hover {
+  text-decoration: underline;
+}
+
+.det__head {
+  max-width: 760px;
+  margin-bottom: var(--sp-5);
+}
+.det__head h1 {
+  font-size: var(--text-xl);
+  margin-bottom: var(--sp-2);
+}
+.det__lead {
+  color: var(--color-ink-2);
+}
+
+/* ---------- Indicador de pasos ---------- */
+.steps {
+  display: flex;
+  gap: var(--sp-2);
+  list-style: none;
+  margin: 0 0 var(--sp-5);
+  padding: 0;
+  font-size: var(--text-sm);
+}
+.steps li {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  padding: var(--sp-2) var(--sp-3);
+  border-radius: var(--radius-pill);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  color: var(--color-muted);
+}
+.steps__num {
+  display: inline-grid;
+  place-items: center;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: var(--color-surface-2);
+  color: var(--color-ink-2);
+  font-size: var(--text-xs);
+  font-weight: 700;
+}
+.steps li.is-current {
+  color: var(--color-primary-dark);
+  border-color: var(--color-primary);
+  font-weight: 600;
+}
+.steps li.is-current .steps__num {
+  background: var(--color-primary);
+  color: #fff;
+}
+.steps li.is-done .steps__num {
+  background: var(--color-primary-soft);
+  color: var(--color-primary-dark);
+}
+.steps li {
+  white-space: nowrap;
+}
+/* En móvil solo el paso actual muestra su texto; los demás, el número. */
+@media (max-width: 600px) {
+  .steps li:not(.is-current) {
+    font-size: 0;
+    padding: var(--sp-2);
+  }
+  .steps li:not(.is-current) .steps__num {
+    font-size: var(--text-xs);
+  }
+}
+
+/* ---------- Rejilla ---------- */
+.det__grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 320px;
+  gap: var(--sp-5);
+  align-items: start;
+}
+@media (max-width: 900px) {
+  .det__grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.det__panel {
+  padding: var(--sp-5);
+}
+.det__panel-title {
+  font-size: var(--text-md);
+  margin-bottom: var(--sp-4);
+}
+
+/* ---------- Zona de carga ---------- */
+.dropzone {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--sp-2);
+  min-height: 220px;
+  padding: var(--sp-5);
+  border: 2px dashed var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-surface-2);
+  color: var(--color-ink-2);
+  text-align: center;
+  cursor: pointer;
+  transition: border-color var(--ease), background-color var(--ease);
+}
+.dropzone:hover,
+.dropzone.is-dragging,
+.dropzone:focus-within {
+  border-color: var(--color-primary);
+  background: var(--color-primary-soft);
+}
+.dropzone:focus-within {
+  box-shadow: var(--focus-ring);
+}
+.dropzone__icon {
+  color: var(--color-primary);
+}
+.dropzone__title {
+  font-weight: 500;
+}
+.dropzone__hint {
+  font-size: var(--text-xs);
+  color: var(--color-muted);
+}
+
+/* ---------- Vista previa ---------- */
+.preview {
+  display: grid;
+  grid-template-columns: minmax(160px, 260px) 1fr;
+  gap: var(--sp-4);
+  align-items: start;
+}
+.preview__img {
+  width: 100%;
+  aspect-ratio: 1;
+  object-fit: cover;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-border);
+  background: var(--color-surface-2);
+}
+.preview__name {
+  font-weight: 600;
+  overflow-wrap: anywhere;
+}
+.preview__size {
+  color: var(--color-muted);
+  font-size: var(--text-sm);
+  margin-bottom: var(--sp-3);
+}
+.preview__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-2);
+}
+.preview__remove {
+  color: var(--color-danger);
+}
+@media (max-width: 560px) {
+  .preview {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ---------- Acciones y estado ---------- */
+.det__actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--sp-3);
+  margin-top: var(--sp-5);
+}
+.det__actions-hint {
+  font-size: var(--text-sm);
+  color: var(--color-muted);
+}
+.det__status {
+  margin-top: var(--sp-4);
+}
+.det__status:empty {
+  display: none;
+}
+.det__retry {
+  margin-top: var(--sp-3);
+}
+
+.dropzone + .alert,
+.preview + .alert,
+.alert + .alert {
+  margin-top: var(--sp-3);
+}
+
+/* ---------- Resultado ---------- */
+.result {
+  padding: var(--sp-5);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-border);
+  border-left-width: 6px;
+  background: var(--color-surface-2);
+}
+.result--healthy {
+  border-left-color: var(--color-success);
+}
+.result--disease {
+  border-left-color: var(--color-danger);
+}
+.result--pest {
+  border-left-color: #c77a00;
+}
+.result__title {
+  font-size: var(--text-lg);
+  margin: var(--sp-2) 0 var(--sp-2);
+}
+.result__desc {
+  color: var(--color-ink-2);
+}
+
+.confidence {
+  margin-top: var(--sp-4);
+}
+.confidence__row {
+  display: flex;
+  justify-content: space-between;
+  font-size: var(--text-sm);
+  margin-bottom: var(--sp-1);
+}
+.confidence__bar {
+  height: 10px;
+  border-radius: var(--radius-pill);
+  background: #dfe7e2;
+  overflow: hidden;
+}
+.confidence__bar span {
+  display: block;
+  height: 100%;
+  background: var(--color-primary);
+  border-radius: inherit;
+  transition: width 400ms ease;
+}
+.confidence__note {
+  margin-top: var(--sp-2);
+  font-size: var(--text-xs);
+  color: var(--color-warning);
+}
+
+.result__disclaimer {
+  margin-top: var(--sp-4);
+  font-size: var(--text-xs);
+  color: var(--color-muted);
+}
+.result__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-2);
+  margin-top: var(--sp-4);
+}
+
+/* ---------- Lateral ---------- */
+.det__aside {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-4);
+}
+.det__tips {
+  padding: var(--sp-5);
+}
+.det__tips ul {
+  margin: 0;
+  padding-left: 1.2em;
+  color: var(--color-ink-2);
+  font-size: var(--text-sm);
+}
+.det__tips li + li {
+  margin-top: var(--sp-2);
+}

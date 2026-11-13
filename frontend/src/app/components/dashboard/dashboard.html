@@ -1,124 +1,159 @@
-<div class="dashboard-wrapper">
-    <header class="dashboard-header">
-        <!-- Coloca este botón donde prefieras en tu diseño del Dashboard -->
-        <button class="btn btn-danger font-weight-bold logout-btn" (click)="logout()">
-            Cerrar Sesión
+<a class="skip-link" href="#contenido">Saltar al contenido</a>
+<app-header variant="light" />
+
+<div class="dash">
+  <header class="dash__hero">
+    <div class="container">
+      <h1>¿Qué cultivo quieres revisar hoy?</h1>
+      <p>Elige el cultivo, sube una foto de la hoja y recibe un diagnóstico en segundos.</p>
+    </div>
+  </header>
+
+  <main id="contenido" class="container dash__main">
+    <!-- Pestañas accesibles (H4: consistencia; H6: reconocer en lugar de recordar) -->
+    <div class="tabs" role="tablist" aria-label="Secciones del panel">
+      @for (s of sections; track s.id) {
+        <button
+          type="button"
+          role="tab"
+          [id]="'tab-' + s.id"
+          [attr.aria-selected]="section() === s.id"
+          [attr.aria-controls]="'panel-' + s.id"
+          [class.is-active]="section() === s.id"
+          (click)="show(s.id)"
+        >
+          {{ s.label }}
         </button>
-        <h1>Detector de enfermedades de plantas</h1>
-        <p>Identifique enfermedades en plantas de banano, arroz y café con nuestros modelos neuronales y obtenga resultados instantáneos.</p>
-        
-        <nav>
-            <ul>
-                <!-- Usamos (click) para llamar a la función de TypeScript -->
-                <li><a href="javascript:void(0)" (click)="cambiarSeccion('home')">Home</a></li>
-                <li><a href="javascript:void(0)" (click)="cambiarSeccion('guide')">Guia de uso</a></li>
-                <li><a href="javascript:void(0)" (click)="cambiarSeccion('about')">Acerca de nosotros</a></li>
-                <li><a href="javascript:void(0)" (click)="cambiarSeccion('contact')">Sobre el desarrollador</a></li>
-            </ul>
-        </nav>
-    </header>
+      }
+    </div>
 
-    <main class="content-area">
-        
-        <!-- SECCIÓN 1: HOME (Tarjetas de Plantas) -->
-        <div class="cards-container" *ngIf="seccionActiva === 'home'">
-            <section class="disease-card">
-                <h2>Detección de enfermedades del banano</h2>
-                <img src="/img/bananaPlants.webp" alt="Banana">
-                <p>Detecta enfermedades comunes en cultivos de plátano como el sigatoka negra y el moko bacteriano.</p>
-                <button class="boton-enfermedad" routerLink="/banana">Explorar</button>
-            </section>
-            <section class="disease-card">
-                <h2>Detección de enfermedades del arroz</h2>
-                <img src="/img/ricePlants.webp" alt="Rice">
-                <p>Identifica problemas como el tizón del arroz o la mancha marrón.</p>
-                <button class="boton-enfermedad" routerLink="/arroz">Explorar</button>
-            </section>
-            <section class="disease-card" [class.disease-card--disabled]="!cafeDisponible">
-                <div class="badge-en-produccion" *ngIf="!cafeDisponible">🚧 En producción</div>
-                <h2>Detección de enfermedades del cafe</h2>
-                <img src="/img/coffeePlants.webp" alt="Coffee">
-                <p>Diagnóstico de enfermedades del café, incluyendo la roya del café y la antracnosis.</p>
-                <button 
-                    class="boton-enfermedad" 
-                    [disabled]="!cafeDisponible"
-                    [routerLink]="cafeDisponible ? '/cafe' : null">
-                    Explorar
-                </button>
-            </section>
+    <!-- ================= CULTIVOS ================= -->
+    @if (section() === 'cultivos') {
+      <section id="panel-cultivos" role="tabpanel" aria-labelledby="tab-cultivos" class="crops">
+        @for (crop of crops; track crop.id) {
+          <article class="card crop" [class.crop--soon]="!crop.available">
+            <div class="crop__media">
+              <img [src]="crop.image" [alt]="'Hojas de ' + crop.name" loading="lazy" />
+              @if (!crop.available) {
+                <span class="badge badge-warning crop__badge">Próximamente</span>
+              }
+            </div>
+            <div class="crop__body">
+              <h2 class="crop__title">{{ crop.name }}</h2>
+              <p class="crop__summary">{{ crop.summary }}</p>
+              <ul class="crop__detects" aria-label="Enfermedades que detecta">
+                @for (d of crop.detects; track d) {
+                  <li class="badge badge-neutral">{{ d }}</li>
+                }
+              </ul>
+              @if (crop.available) {
+                <a class="btn btn-primary crop__cta" [routerLink]="'/' + crop.id">
+                  Diagnosticar {{ crop.name | lowercase }}
+                </a>
+              } @else {
+                <button class="btn btn-secondary crop__cta" type="button" disabled>No disponible todavía</button>
+              }
+            </div>
+          </article>
+        }
+      </section>
+
+      <div class="alert alert-warning dash__notice" role="note">
+        <div>
+          <strong>Importante</strong>
+          Cada modelo está entrenado solo para su cultivo y no distingue especies por sí mismo.
+          Usa siempre el detector que corresponde a la planta fotografiada.
         </div>
+      </div>
+    }
 
-        <!-- SECCIÓN 2: ACERCA DE NOSOTROS -->
-        <div class="info-card-container" *ngIf="seccionActiva === 'about'">
-            <section class="info-card">
-                <h2>Sobre nosotros</h2>
-                <p>Nos dedicamos a ayudar a los agricultores a detectar y gestionar enfermedades de las plantas de manera eficiente y precisa. Para ello, hemos desarrollado una plataforma web que utiliza Inteligencia Artificial (IA) para diagnosticar la salud de tres cultivos clave: <strong>banano, arroz y café</strong>.</p>
-                
-                <p>A través de nuestra herramienta, los usuarios pueden cargar imágenes de las hojas de sus cultivos. Nuestra tecnología analiza rápidamente los patrones visuales para identificar posibles infecciones, permitiendo a los agricultores tomar decisiones oportunas que salven sus cosechas y optimicen sus recursos.</p>
-                
-                <div class="alert alert-warning mt-3" style="background-color: #fff3cd; color: #856404; padding: 15px; border-radius: 8px; border: 1px solid #ffeeba;">
-                    <strong>⚠️ Consideración importante sobre la IA:</strong><br>
-                    Nuestros modelos neuronales son altamente precisos diagnosticando enfermedades, pero asumen que la imagen proporcionada corresponde a la planta correcta. El sistema no diferencia especies de plantas por sí solo. Por ello, es vital asegurarse de utilizar el detector correspondiente a su cultivo para obtener resultados fiables.
-                </div>
-            </section>
+    <!-- ================= GUÍA ================= -->
+    @if (section() === 'guia') {
+      <section id="panel-guia" role="tabpanel" aria-labelledby="tab-guia" class="card dash__panel">
+        <h2>Guía de uso</h2>
+        <p class="dash__lead">Cuatro pasos para obtener un diagnóstico:</p>
+        <ol class="guide">
+          <li>
+            <strong>Elige el cultivo.</strong>
+            En la pestaña <em>Cultivos</em>, pulsa el botón del cultivo que quieres analizar.
+          </li>
+          <li>
+            <strong>Sube la foto de la hoja.</strong>
+            Arrastra la imagen o pulsa para elegirla. Se aceptan JPG, PNG y WEBP de hasta 10 MB.
+            Verás una vista previa y podrás cambiarla antes de continuar.
+          </li>
+          <li>
+            <strong>Pulsa «Analizar hoja».</strong>
+            El análisis tarda unos segundos. Si el servidor estaba inactivo, la primera vez puede tardar hasta un minuto.
+          </li>
+          <li>
+            <strong>Lee el resultado.</strong>
+            Verás el nombre de la enfermedad (o «hoja saludable»), una breve descripción y la confianza del modelo.
+            Desde ahí puedes analizar otra hoja o volver a elegir cultivo.
+          </li>
+        </ol>
+        <h3>Para una buena foto</h3>
+        <ul class="guide-tips">
+          <li>Una sola hoja, enfocada y con luz natural.</li>
+          <li>Las lesiones deben verse claramente; acércate si hace falta.</li>
+          <li>Evita sombras duras, reflejos y hojas mojadas.</li>
+        </ul>
+      </section>
+    }
+
+    <!-- ================= ACERCA ================= -->
+    @if (section() === 'acerca') {
+      <section id="panel-acerca" role="tabpanel" aria-labelledby="tab-acerca" class="card dash__panel">
+        <h2>Acerca del proyecto</h2>
+        <p>
+          Plant Disease Detector IA ayuda a agricultores y técnicos a detectar enfermedades foliares
+          de forma rápida a partir de una fotografía. La plataforma analiza tres cultivos clave:
+          <strong>banano, arroz y café</strong>.
+        </p>
+        <p>
+          Cada cultivo tiene su propio modelo de aprendizaje automático entrenado con imágenes de
+          hojas sanas y enfermas. El objetivo es apoyar la observación en campo para tomar decisiones
+          a tiempo y reducir pérdidas.
+        </p>
+        <div class="alert alert-info">
+          <div>
+            <strong>Alcance de la herramienta</strong>
+            El resultado es orientativo. No sustituye la evaluación de un profesional agrónomo ni un
+            análisis de laboratorio.
+          </div>
         </div>
+      </section>
+    }
 
-        <!-- SECCIÓN 3: CONTACTO Y PERFIL -->
-        <div class="info-card-container" *ngIf="seccionActiva === 'contact'">
-            <section class="info-card">
-                <h2>Desarrollador del Proyecto</h2>
-                
-                <div class="contact-profile mt-4">
-
-                    <h3 style="color: #2c3e50; margin-bottom: 5px;">Angel Cabezas</h3>
-                    <h5 class="text-muted" style="font-size: 1rem; margin-bottom: 20px;">
-                        Ingeniero de Software | Escuela Politécnica Nacional (EPN)
-                    </h5>
-                    
-                    <p style="line-height: 1.6; margin-bottom: 20px;">
-                        Soy un Ingeniero de Software apasionado por el desarrollo de soluciones tecnológicas que generen un impacto real. Este proyecto nació como una iniciativa de investigación académica que posteriormente escalé y modernicé, implementando una arquitectura Full-Stack con <strong>Angular 17</strong> en el Frontend y <strong>Python (Flask)</strong> en el Backend para el despliegue de modelos de Inteligencia Artificial.
-                    </p>
-                    
-                    <p style="line-height: 1.6; margin-bottom: 25px;">
-                        Me especializo en el desarrollo web moderno, la integración de tecnologías emergentes y la aplicación de buenas prácticas de ingeniería de software. ¡Conecta conmigo!
-                    </p>
-
-                    <div class="contact-links" style="display: flex; gap: 20px; flex-wrap: wrap;">
-                        <a href="mailto:angelcabezas1999@gmail.com" class="btn btn-outline-dark">
-                            ✉️ Correo Electrónico
-                        </a>
-                        <!-- Reemplaza el # con tu link real de LinkedIn -->
-                        <a href="https://www.linkedin.com/in/angel-cabezas-6065021a8" target="_blank" class="btn btn-outline-primary">
-                            💼 LinkedIn
-                        </a>
-                        <!-- Reemplaza el # con tu link real de GitHub -->
-                        <a href="https://github.com/AngelCabezas" target="_blank" class="btn btn-outline-secondary">
-                            💻 GitHub
-                        </a>
-                    </div>
-                </div>
-            </section>
+    <!-- ================= DESARROLLADOR ================= -->
+    @if (section() === 'desarrollador') {
+      <section id="panel-desarrollador" role="tabpanel" aria-labelledby="tab-desarrollador" class="card dash__panel">
+        <h2>Desarrollador del proyecto</h2>
+        <p class="dev__name">Angel Cabezas</p>
+        <p class="dev__role">Ingeniero de Software · Escuela Politécnica Nacional (EPN)</p>
+        <p>
+          Este proyecto nació como una iniciativa de investigación académica que después escalé y
+          modernicé con una arquitectura full-stack: <strong>Angular</strong> en el frontend y
+          <strong>Python (Flask)</strong> en el backend para servir los modelos de IA.
+        </p>
+        <p>
+          Me especializo en desarrollo web moderno, integración de tecnologías emergentes y buenas
+          prácticas de ingeniería de software.
+        </p>
+        <div class="dev__links">
+          <a class="btn btn-secondary" href="mailto:angelcabezas1999@gmail.com">Correo electrónico</a>
+          <a class="btn btn-secondary" href="https://www.linkedin.com/in/angel-cabezas-6065021a8" target="_blank" rel="noopener">
+            LinkedIn <span class="visually-hidden">(se abre en una pestaña nueva)</span>
+          </a>
+          <a class="btn btn-secondary" href="https://github.com/AngelCabezas" target="_blank" rel="noopener">
+            GitHub <span class="visually-hidden">(se abre en una pestaña nueva)</span>
+          </a>
         </div>
+      </section>
+    }
+  </main>
 
-        <!-- SECCIÓN 4: GUÍA -->
-        <div class="info-card-container" *ngIf="seccionActiva === 'guide'">
-            <section class="info-card guide-card">
-                <h2>Guía de Uso</h2>
-                <p class="mb-4">Siga estos sencillos pasos para analizar sus cultivos y obtener un diagnóstico con Inteligencia Artificial:</p>
-                
-                <ol style="line-height: 1.8; text-align: left; padding-left: 20px;">
-                    <li><strong>Seleccionar el cultivo:</strong> En la pestaña principal (Home), haga clic en el botón "Explorar" de la planta que desea analizar (Banano, Arroz o Café).</li>
-                    <li><strong>Elegir la fotografía:</strong> Pulse "Elige una imagen" y seleccione una foto clara de la hoja. Los formatos admitidos son JPEG, PNG y WEBP.</li>
-                    <li><strong>Procesar la imagen:</strong> Haga clic en el botón "Subir imagen" para enviar el archivo a nuestro modelo de IA.</li>
-                    <li><strong>Obtener el diagnóstico:</strong> Espere un par de segundos; el resultado de la predicción aparecerá automáticamente en la parte inferior.</li>
-                    <li><strong>Nuevas consultas:</strong> Para evaluar otra hoja del mismo cultivo, simplemente repita desde el paso 2. Para cambiar a un cultivo diferente, pulse el botón <strong>"REGRESAR"</strong> al final de la página.</li>
-                </ol>
-            </section>
-        </div>
-
-    </main>
-
-    <footer class="dashboard-footer">
-        <p>&copy; 2026 Plant Disease Detector</p>
-    </footer>
+  <footer class="dash__footer">
+    <p>© 2026 Plant Disease Detector IA</p>
+  </footer>
 </div>

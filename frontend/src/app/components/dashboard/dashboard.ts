@@ -1,34 +1,29 @@
-import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
-import { Router, RouterModule } from '@angular/router';
-import { Auth, signOut } from '@angular/fire/auth';
+import { LowerCasePipe } from '@angular/common';
+import { Component, signal } from '@angular/core';
+import { RouterLink } from '@angular/router';
+import { CROP_LIST } from '../../core/crops';
+import { AppHeader } from '../shared/app-header/app-header';
+
+type Section = 'cultivos' | 'guia' | 'acerca' | 'desarrollador';
 
 @Component({
   selector: 'app-dashboard',
-  imports: [RouterModule, CommonModule],
+  imports: [RouterLink, LowerCasePipe, AppHeader],
   templateUrl: './dashboard.html',
   styleUrl: './dashboard.css',
 })
 export class Dashboard {
+  readonly crops = CROP_LIST;
+  readonly section = signal<Section>('cultivos');
 
-  // Inyectamos la autenticación y el enrutador
-  constructor(private auth: Auth, private router: Router) {}
+  readonly sections: { id: Section; label: string }[] = [
+    { id: 'cultivos', label: 'Cultivos' },
+    { id: 'guia', label: 'Guía de uso' },
+    { id: 'acerca', label: 'Acerca del proyecto' },
+    { id: 'desarrollador', label: 'Desarrollador' },
+  ];
 
-  cafeDisponible = false;
-  // Función para cerrar sesión
-  async logout() {
-    try {
-      await signOut(this.auth); // Le dice a Firebase que cierre la sesión
-      this.router.navigate(['/login']); // Te expulsa de vuelta al Login
-    } catch (error) {
-      console.error("Error al cerrar sesión:", error);
-    }
+  show(section: Section) {
+    this.section.set(section);
   }
-
-  seccionActiva: string = 'home';
-
-  cambiarSeccion(seccion: string) {
-    this.seccionActiva = seccion;
-  }
-
 }

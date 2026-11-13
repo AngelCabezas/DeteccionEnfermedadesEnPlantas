@@ -1,20 +1,73 @@
-<!-- Envolvemos todo en este contenedor principal -->
-<div class="home-wrapper">
-    <header>
-        <div class="navbar">
-            <button class="login-button" routerLink="/login">Iniciar sesión</button>
-        </div>
-    </header>
+<a class="skip-link" href="#contenido">Saltar al contenido</a>
+<div class="home">
+  <app-header variant="dark" />
 
-    <section class="main-section">
-        <div class="logo-container">
-            <img src="img/Logo.png" alt="Logo" class="logo">
+  <main id="contenido">
+    <!-- ================= HERO ================= -->
+    <section class="hero">
+      <div class="container hero__inner">
+        <img class="hero__logo" src="/img/Logo.png" alt="" width="140" height="140" />
+        <p class="hero__kicker">Plant Disease Detector IA</p>
+        <h1 class="hero__title">Detecta enfermedades en tus cultivos con una foto</h1>
+        <p class="hero__lead">
+          Sube una imagen de la hoja y la inteligencia artificial te dice si está sana o qué
+          enfermedad reconoce. Rápido, gratuito y pensado para el campo.
+        </p>
+        <div class="hero__actions">
+          @if (user()) {
+            <a class="btn btn-primary btn-lg" routerLink="/dashboard">Ir al diagnóstico</a>
+          } @else {
+            <a class="btn btn-primary btn-lg" routerLink="/login">Empezar ahora</a>
+          }
+          <a class="btn btn-ghost btn-lg" routerLink="/informacion">Conoce el proyecto</a>
         </div>
-        <div class="texto">
-            <h1>PLANT DISEASE DETECTOR IA</h1>
-            <h2>¡Bienvenido a Plant Disease Detector IA! Simplifica el cuidado de tus cultivos con nuestra tecnología avanzada.</h2>
-            <p>Optimiza tus cultivos con inteligencia artificial: rápido, preciso y confiable.</p>
-        </div>
-        <button class="info-button" routerLink="/informacion">¿Quieres saber más de nosotros?</button>
+      </div>
     </section>
+
+    <!-- ================= CULTIVOS ================= -->
+    <section class="crops-strip" aria-labelledby="cultivos-titulo">
+      <div class="container">
+        <h2 id="cultivos-titulo" class="section-title">Tres cultivos, tres modelos especializados</h2>
+        <div class="crops-strip__grid">
+          @for (crop of crops; track crop.id) {
+            <article class="crop-mini">
+              <img [src]="crop.image" [alt]="'Hojas de ' + crop.name" loading="lazy" />
+              <div>
+                <h3>{{ crop.name }}</h3>
+                <p>{{ crop.summary }}</p>
+              </div>
+            </article>
+          }
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= CÓMO FUNCIONA ================= -->
+    <section class="how" aria-labelledby="como-titulo">
+      <div class="container">
+        <h2 id="como-titulo" class="section-title">Cómo funciona</h2>
+        <ol class="how__steps">
+          <li>
+            <span class="how__num" aria-hidden="true">1</span>
+            <h3>Elige el cultivo</h3>
+            <p>Banano, arroz o café. Cada uno tiene su propio modelo.</p>
+          </li>
+          <li>
+            <span class="how__num" aria-hidden="true">2</span>
+            <h3>Sube una foto de la hoja</h3>
+            <p>Desde tu teléfono o computador. JPG, PNG o WEBP.</p>
+          </li>
+          <li>
+            <span class="how__num" aria-hidden="true">3</span>
+            <h3>Recibe el diagnóstico</h3>
+            <p>Nombre de la enfermedad, descripción y nivel de confianza.</p>
+          </li>
+        </ol>
+      </div>
+    </section>
+  </main>
+
+  <footer class="home__footer">
+    <p>© 2026 Plant Disease Detector IA · Escuela Politécnica Nacional</p>
+  </footer>
 </div>

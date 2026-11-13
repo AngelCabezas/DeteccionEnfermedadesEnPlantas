@@ -1,1 +1,395 @@
-/* You can add global styles to this file, and also import other style files */
+/* =====================================================================
+   SISTEMA DE DISEÑO — Plant Disease Detector IA
+   ---------------------------------------------------------------------
+   Un único origen de verdad para colores, tipografía, espaciado y
+   componentes base. Esto cumple la heurística 4 de Nielsen (consistencia
+   y estándares) y el principio de "conformidad con las expectativas del
+   usuario" de ISO 9241-110.
+
+   Contraste: todos los pares texto/fondo cumplen WCAG 2.1 AA (≥ 4.5:1 en
+   texto normal, ≥ 3:1 en texto grande y componentes de interfaz), que es
+   la referencia que adopta ISO 9241-112 para presentación de información.
+   ===================================================================== */
+
+:root {
+  /* --- Color: marca (verde del logotipo) --- */
+  --color-primary: #1f7a3a;         /* sobre blanco: 5.3:1  */
+  --color-primary-hover: #186130;
+  --color-primary-dark: #14522f;    /* sobre blanco: 8.6:1  */
+  --color-primary-soft: #e4f3e8;    /* fondo tenue          */
+  --color-primary-on-dark: #7fd68f; /* texto verde sobre fondos oscuros: 8.9:1 sobre --color-ink */
+
+  /* --- Color: neutros --- */
+  --color-ink: #16201b;             /* texto principal, 16.5:1 sobre blanco */
+  --color-ink-2: #3c4a42;           /* texto secundario, 8.9:1 */
+  --color-muted: #5b6b62;           /* texto terciario, 5.6:1  */
+  --color-border: #d4ddd7;
+  --color-surface: #ffffff;
+  --color-surface-2: #f3f7f4;
+  --color-bg: #eef3ef;
+
+  /* --- Color: superficies oscuras (hero, login) --- */
+  --color-dark: #0f1912;
+  --color-dark-2: rgba(15, 25, 18, 0.82);
+  --color-on-dark: #f4f7f5;
+  --color-on-dark-muted: #c3cdc6;   /* 9.7:1 sobre --color-dark */
+
+  /* --- Color: semánticos --- */
+  --color-success: #1f7a3a;
+  --color-success-bg: #e4f3e8;
+  --color-warning: #7a4d00;         /* 7.4:1 sobre --color-warning-bg */
+  --color-warning-bg: #fff3d6;
+  --color-danger: #b3261e;          /* 5.9:1 sobre blanco */
+  --color-danger-bg: #fdecea;
+  --color-info: #0b5e8a;
+  --color-info-bg: #e4f1f9;
+
+  /* --- Foco (visible en claro y oscuro) --- */
+  --focus-ring: 0 0 0 3px #ffffff, 0 0 0 6px #2563eb;
+
+  /* --- Tipografía --- */
+  --font-sans: 'Poppins', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --text-xs: 0.8125rem;   /* 13px */
+  --text-sm: 0.9375rem;   /* 15px */
+  --text-base: 1rem;      /* 16px: tamaño mínimo recomendado para cuerpo */
+  --text-md: 1.125rem;    /* 18px */
+  --text-lg: clamp(1.25rem, 1.1rem + 0.6vw, 1.5rem);
+  --text-xl: clamp(1.5rem, 1.2rem + 1.4vw, 2rem);
+  --text-2xl: clamp(1.9rem, 1.4rem + 2.4vw, 2.75rem);
+  --leading-tight: 1.2;
+  --leading-normal: 1.55;
+
+  /* --- Espaciado (escala de 4px) --- */
+  --sp-1: 0.25rem;
+  --sp-2: 0.5rem;
+  --sp-3: 0.75rem;
+  --sp-4: 1rem;
+  --sp-5: 1.5rem;
+  --sp-6: 2rem;
+  --sp-7: 3rem;
+  --sp-8: 4rem;
+
+  /* --- Forma --- */
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 20px;
+  --radius-pill: 999px;
+  --shadow-sm: 0 1px 2px rgba(22, 32, 27, 0.08), 0 1px 6px rgba(22, 32, 27, 0.06);
+  --shadow-md: 0 6px 20px rgba(22, 32, 27, 0.12);
+  --shadow-lg: 0 18px 44px rgba(0, 0, 0, 0.28);
+
+  /* --- Objetivo táctil mínimo (ISO 9241-410 / WCAG 2.5.8) --- */
+  --tap-min: 44px;
+
+  --ease: 180ms cubic-bezier(0.2, 0, 0, 1);
+  --container: 1180px;
+}
+
+/* ---------- Reset mínimo ---------- */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-sans);
+  font-size: var(--text-base);
+  line-height: var(--leading-normal);
+  color: var(--color-ink);
+  background: var(--color-bg);
+  -webkit-font-smoothing: antialiased;
+}
+
+img,
+svg {
+  display: block;
+  max-width: 100%;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  margin: 0;
+  line-height: var(--leading-tight);
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+p {
+  margin: 0;
+}
+
+a {
+  color: var(--color-primary);
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+  color: inherit;
+}
+
+/* Foco visible para teclado (heurística 1: visibilidad del estado). */
+:focus-visible {
+  outline: none;
+  box-shadow: var(--focus-ring);
+  border-radius: var(--radius-sm);
+}
+
+/* Respeta la preferencia de menos movimiento (WCAG 2.3.3). */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ---------- Utilidades de accesibilidad ---------- */
+.visually-hidden {
+  position: absolute !important;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.skip-link {
+  position: absolute;
+  top: -100px;
+  left: var(--sp-4);
+  z-index: 1000;
+  padding: var(--sp-2) var(--sp-4);
+  background: var(--color-surface);
+  color: var(--color-ink);
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow-md);
+  font-weight: 600;
+  text-decoration: none;
+}
+.skip-link:focus {
+  top: var(--sp-4);
+}
+
+/* ---------- Layout ---------- */
+.container {
+  width: min(100% - 2 * var(--sp-4), var(--container));
+  margin-inline: auto;
+}
+
+/* ---------- Botones ---------- */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--sp-2);
+  min-height: var(--tap-min);
+  padding: 0.65rem 1.25rem;
+  border: 1.5px solid transparent;
+  border-radius: var(--radius-sm);
+  font-weight: 600;
+  font-size: var(--text-sm);
+  line-height: 1.2;
+  text-decoration: none;
+  cursor: pointer;
+  user-select: none;
+  transition: background-color var(--ease), color var(--ease), border-color var(--ease),
+    transform var(--ease), box-shadow var(--ease);
+}
+.btn:active:not(:disabled) {
+  transform: translateY(1px);
+}
+.btn:disabled,
+.btn[aria-disabled='true'] {
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+
+.btn-primary {
+  background: var(--color-primary);
+  color: #fff;
+}
+.btn-primary:hover:not(:disabled) {
+  background: var(--color-primary-hover);
+}
+
+.btn-secondary {
+  background: var(--color-surface);
+  color: var(--color-primary-dark);
+  border-color: var(--color-border);
+}
+.btn-secondary:hover:not(:disabled) {
+  background: var(--color-surface-2);
+  border-color: var(--color-primary);
+}
+
+.btn-ghost {
+  background: transparent;
+  color: inherit;
+  border-color: currentColor;
+}
+.btn-ghost:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.btn-danger {
+  background: var(--color-danger);
+  color: #fff;
+}
+.btn-danger:hover:not(:disabled) {
+  background: #951f18;
+}
+
+.btn-lg {
+  min-height: 52px;
+  padding: 0.85rem 1.75rem;
+  font-size: var(--text-base);
+}
+
+.btn-block {
+  width: 100%;
+}
+
+/* Spinner dentro de botones y estados de carga */
+.spinner {
+  width: 1.1em;
+  height: 1.1em;
+  border: 2.5px solid currentColor;
+  border-right-color: transparent;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+  flex: none;
+}
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* ---------- Tarjetas ---------- */
+.card {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+}
+
+/* ---------- Formularios ---------- */
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+  text-align: left;
+}
+.field label {
+  font-weight: 600;
+  font-size: var(--text-sm);
+}
+.field .hint {
+  font-size: var(--text-xs);
+  color: var(--color-muted);
+}
+.field .error {
+  font-size: var(--text-xs);
+  color: var(--color-danger);
+  font-weight: 600;
+}
+.input {
+  min-height: var(--tap-min);
+  width: 100%;
+  padding: 0.6rem 0.9rem;
+  border: 1.5px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  background: var(--color-surface);
+  color: var(--color-ink);
+  transition: border-color var(--ease), box-shadow var(--ease);
+}
+.input::placeholder {
+  color: #68746d;
+}
+.input:focus-visible {
+  border-color: var(--color-primary);
+}
+.input[aria-invalid='true'] {
+  border-color: var(--color-danger);
+}
+
+/* ---------- Alertas / mensajes de estado ---------- */
+.alert {
+  display: flex;
+  gap: var(--sp-3);
+  align-items: flex-start;
+  padding: var(--sp-3) var(--sp-4);
+  border-radius: var(--radius-sm);
+  border: 1px solid transparent;
+  font-size: var(--text-sm);
+  text-align: left;
+}
+.alert strong {
+  display: block;
+  margin-bottom: 2px;
+}
+.alert-info {
+  background: var(--color-info-bg);
+  color: var(--color-info);
+  border-color: #bcd8ea;
+}
+.alert-success {
+  background: var(--color-success-bg);
+  color: var(--color-primary-dark);
+  border-color: #b9dec4;
+}
+.alert-warning {
+  background: var(--color-warning-bg);
+  color: var(--color-warning);
+  border-color: #f1d99a;
+}
+.alert-danger {
+  background: var(--color-danger-bg);
+  color: var(--color-danger);
+  border-color: #f3c2bd;
+}
+
+/* ---------- Etiquetas ---------- */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35em;
+  padding: 0.2em 0.7em;
+  border-radius: var(--radius-pill);
+  font-size: var(--text-xs);
+  font-weight: 600;
+  line-height: 1.4;
+}
+.badge-success {
+  background: var(--color-success-bg);
+  color: var(--color-primary-dark);
+}
+.badge-warning {
+  background: var(--color-warning-bg);
+  color: var(--color-warning);
+}
+.badge-danger {
+  background: var(--color-danger-bg);
+  color: var(--color-danger);
+}
+.badge-neutral {
+  background: var(--color-surface-2);
+  color: var(--color-ink-2);
+}

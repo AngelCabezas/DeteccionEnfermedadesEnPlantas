@@ -1,161 +1,154 @@
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+.home {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: var(--color-dark);
+  color: var(--color-on-dark);
 }
 
-/* =========================================
-   1. CONTENEDOR PRINCIPAL (100% de la pantalla)
-   ========================================= */
-.home-wrapper {
-    font-family: 'Arial', sans-serif;
-    background-color: #14522f;
-    color: white;
-    background-image: url('/img/fondoInicio.png'); 
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-    
-    /* BLOQUEAMOS EL SCROLL */
-    height: 100vh; /* Altura exacta de 1 pantalla */
-    width: 100vw;
-    overflow: hidden; /* Cero barras de desplazamiento */
-    
-    display: flex;
-    flex-direction: column;
+/* ---------- Hero ---------- */
+.hero {
+  background:
+    linear-gradient(180deg, rgba(15, 25, 18, 0.55) 0%, rgba(15, 25, 18, 0.88) 100%),
+    url('/img/fondoInicio.png') center / cover no-repeat;
+  padding: var(--sp-8) 0;
+}
+.hero__inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  max-width: 760px;
+}
+.hero__logo {
+  border-radius: 50%;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.45);
+  margin-bottom: var(--sp-5);
+}
+.hero__kicker {
+  font-size: var(--text-sm);
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--color-primary-on-dark);
+  margin-bottom: var(--sp-3);
+}
+.hero__title {
+  font-size: var(--text-2xl);
+  font-weight: 700;
+  margin-bottom: var(--sp-4);
+}
+.hero__lead {
+  font-size: var(--text-md);
+  color: var(--color-on-dark-muted);
+  max-width: 600px;
+  margin-bottom: var(--sp-6);
+}
+.hero__actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--sp-3);
 }
 
-/* =========================================
-   2. BARRA DE NAVEGACIÓN
-   ========================================= */
-.navbar {
-    display: flex;
-    justify-content: flex-end;
+/* ---------- Secciones claras ---------- */
+.crops-strip,
+.how {
+  background: var(--color-bg);
+  color: var(--color-ink);
+  padding: var(--sp-7) 0;
+}
+.how {
+  background: var(--color-surface);
+  border-top: 1px solid var(--color-border);
+}
+.section-title {
+  font-size: var(--text-xl);
+  text-align: center;
+  margin-bottom: var(--sp-6);
+}
+
+.crops-strip__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: var(--sp-4);
+}
+.crop-mini {
+  display: grid;
+  grid-template-columns: 96px 1fr;
+  gap: var(--sp-4);
+  align-items: center;
+  padding: var(--sp-4);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+}
+.crop-mini img {
+  width: 96px;
+  height: 96px;
+  object-fit: cover;
+  border-radius: var(--radius-sm);
+}
+.crop-mini h3 {
+  font-size: var(--text-md);
+  margin-bottom: var(--sp-1);
+}
+.crop-mini p {
+  font-size: var(--text-sm);
+  color: var(--color-ink-2);
+}
+
+.how__steps {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: var(--sp-5);
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  counter-reset: none;
+}
+.how__steps li {
+  text-align: center;
+  padding: var(--sp-4);
+}
+.how__num {
+  display: inline-grid;
+  place-items: center;
+  width: 48px;
+  height: 48px;
+  margin-bottom: var(--sp-3);
+  border-radius: 50%;
+  background: var(--color-primary-soft);
+  color: var(--color-primary-dark);
+  font-weight: 700;
+  font-size: var(--text-md);
+}
+.how__steps h3 {
+  font-size: var(--text-md);
+  margin-bottom: var(--sp-2);
+}
+.how__steps p {
+  color: var(--color-ink-2);
+  font-size: var(--text-sm);
+}
+
+.home__footer {
+  padding: var(--sp-4);
+  text-align: center;
+  font-size: var(--text-xs);
+  color: var(--color-on-dark-muted);
+}
+
+@media (max-width: 600px) {
+  .hero {
+    padding: var(--sp-6) 0 var(--sp-7);
+  }
+  .hero__logo {
+    width: 104px;
+    height: 104px;
+  }
+  .hero__actions .btn {
     width: 100%;
-    padding: 2vh 2vw; /* Usamos % de la pantalla (vh/vw) en vez de px fijos */
-    gap: 15px; 
-    flex-shrink: 0; /* Evita que el menú se aplaste */
-}
-
-.lang-button, .login-button {
-    background-color: #186525;
-    color: white;
-    border-radius: 8px;
-    padding: 1.5vh 2vw; /* Áreas táctiles relativas a la pantalla */
-    cursor: pointer;
-    font-size: clamp(12px, 1.2vw, 14px); /* Texto adaptable */
-    border: 1px solid transparent; 
-    transition: all 0.3s ease;
-}
-
-.login-button {
-    font-weight: bold;
-}
-
-/* UX: Indicadores claros de interacción */
-.lang-button:hover, .login-button:hover, .info-button:hover {
-    background-color: #580505;
-}
-
-.lang-button:focus, .login-button:focus, .info-button:focus {
-    outline: 3px solid #ffffff; 
-    outline-offset: 2px;
-}
-
-/* =========================================
-   3. SECCIÓN PRINCIPAL
-   ========================================= */
-.main-section {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    flex-grow: 1; /* Toma el espacio restante */
-    text-align: center;
-    padding: 1vh 2vw 3vh 2vw;
-    min-height: 0; /* Clave en flexbox para evitar desborde hacia abajo */
-}
-
-.logo-container {
-    margin-bottom: 2vh;
-    display: flex;
-    justify-content: center;
-    /* Limitamos la altura del logo al 35% del espacio para que no rompa el diseño */
-    height: 35vh; 
-}
-
-.logo {
-    width: auto;
-    height: 100%; /* Crece hasta el límite de su contenedor (35vh) */
-    max-width: 90vw; /* Evita que sea gigante en celulares */
-    object-fit: contain;
-}
-
-/* =========================================
-   4. CAJA DE TEXTO Y BOTÓN
-   ========================================= */
-.texto {
-    border-radius: 30px;
-    background-color: rgba(40, 37, 37, 0.4); 
-    padding: 3vh 3vw; /* Padding relativo */
-    max-width: 800px;
-    width: 90%; 
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-}
-
-h1 {
-    font-size: clamp(24px, 4vw, 50px); 
-    letter-spacing: 2px;
-    font-weight: bold;
-    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.8);
-    margin-bottom: 1vh;
-}
-
-h2 {
-    font-size: clamp(16px, 2.5vw, 28px);
-    margin-bottom: 1.5vh;
-    font-weight: lighter;
-    line-height: 1.4;
-    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.8);
-}
-
-p {
-    font-size: clamp(12px, 1.5vw, 18px);
-    margin-bottom: 1.5vh;
-    font-weight: normal;
-    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.8);
-    margin: 0; /* Limpiamos márgenes extra al final */
-}
-
-.info-button {
-    background-color: #186525;
-    color: white;
-    border-radius: 8px;
-    padding: 2vh 4vw; /* Botón adaptable */
-    cursor: pointer;
-    font-size: clamp(14px, 1.8vw, 18px);
-    font-weight: bold;
-    border: none;
-    margin-top: 3vh;
-    transition: background-color 0.3s ease;
-}
-
-/* =========================================
-   5. MEDIA QUERIES (Móviles)
-   ========================================= */
-@media (max-width: 768px) {
-    .navbar {
-        justify-content: center; 
-    }
-    
-    .texto {
-        padding: 2vh 4vw;
-    }
-    
-    .info-button {
-        width: 100%; 
-        max-width: 300px;
-    }
+  }
 }
