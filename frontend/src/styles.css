@@ -13,16 +13,16 @@
 
 :root {
   /* --- Color: marca (verde del logotipo) --- */
-  --color-primary: #1f7a3a;         /* sobre blanco: 5.3:1  */
+  --color-primary: #1f7a3a; /* sobre blanco: 5.3:1  */
   --color-primary-hover: #186130;
-  --color-primary-dark: #14522f;    /* sobre blanco: 8.6:1  */
-  --color-primary-soft: #e4f3e8;    /* fondo tenue          */
+  --color-primary-dark: #14522f; /* sobre blanco: 8.6:1  */
+  --color-primary-soft: #e4f3e8; /* fondo tenue          */
   --color-primary-on-dark: #7fd68f; /* texto verde sobre fondos oscuros: 8.9:1 sobre --color-ink */
 
   /* --- Color: neutros --- */
-  --color-ink: #16201b;             /* texto principal, 16.5:1 sobre blanco */
-  --color-ink-2: #3c4a42;           /* texto secundario, 8.9:1 */
-  --color-muted: #5b6b62;           /* texto terciario, 5.6:1  */
+  --color-ink: #16201b; /* texto principal, 16.5:1 sobre blanco */
+  --color-ink-2: #3c4a42; /* texto secundario, 8.9:1 */
+  --color-muted: #5b6b62; /* texto terciario, 5.6:1  */
   --color-border: #d4ddd7;
   --color-surface: #ffffff;
   --color-surface-2: #f3f7f4;
@@ -32,27 +32,28 @@
   --color-dark: #0f1912;
   --color-dark-2: rgba(15, 25, 18, 0.82);
   --color-on-dark: #f4f7f5;
-  --color-on-dark-muted: #c3cdc6;   /* 9.7:1 sobre --color-dark */
+  --color-on-dark-muted: #c3cdc6; /* 9.7:1 sobre --color-dark */
 
   /* --- Color: semánticos --- */
   --color-success: #1f7a3a;
   --color-success-bg: #e4f3e8;
-  --color-warning: #7a4d00;         /* 7.4:1 sobre --color-warning-bg */
+  --color-warning: #7a4d00; /* 7.4:1 sobre --color-warning-bg */
   --color-warning-bg: #fff3d6;
-  --color-danger: #b3261e;          /* 5.9:1 sobre blanco */
+  --color-danger: #b3261e; /* 5.9:1 sobre blanco */
   --color-danger-bg: #fdecea;
   --color-info: #0b5e8a;
   --color-info-bg: #e4f1f9;
+  --color-track: #dfe7e2; /* fondo de barras de progreso */
 
   /* --- Foco (visible en claro y oscuro) --- */
   --focus-ring: 0 0 0 3px #ffffff, 0 0 0 6px #2563eb;
 
   /* --- Tipografía --- */
   --font-sans: 'Poppins', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
-  --text-xs: 0.8125rem;   /* 13px */
-  --text-sm: 0.9375rem;   /* 15px */
-  --text-base: 1rem;      /* 16px: tamaño mínimo recomendado para cuerpo */
-  --text-md: 1.125rem;    /* 18px */
+  --text-xs: 0.8125rem; /* 13px */
+  --text-sm: 0.9375rem; /* 15px */
+  --text-base: 1rem; /* 16px: tamaño mínimo recomendado para cuerpo */
+  --text-md: 1.125rem; /* 18px */
   --text-lg: clamp(1.25rem, 1.1rem + 0.6vw, 1.5rem);
   --text-xl: clamp(1.5rem, 1.2rem + 1.4vw, 2rem);
   --text-2xl: clamp(1.9rem, 1.4rem + 2.4vw, 2.75rem);
@@ -209,8 +210,12 @@ textarea {
   text-decoration: none;
   cursor: pointer;
   user-select: none;
-  transition: background-color var(--ease), color var(--ease), border-color var(--ease),
-    transform var(--ease), box-shadow var(--ease);
+  transition:
+    background-color var(--ease),
+    color var(--ease),
+    border-color var(--ease),
+    transform var(--ease),
+    box-shadow var(--ease);
 }
 .btn:active:not(:disabled) {
   transform: translateY(1px);
@@ -245,7 +250,8 @@ textarea {
   border-color: currentColor;
 }
 .btn-ghost:hover:not(:disabled) {
-  background: rgba(255, 255, 255, 0.12);
+  /* Toma el 12 % del color del texto: funciona sobre fondos claros y oscuros. */
+  background: color-mix(in srgb, currentColor 12%, transparent);
 }
 
 .btn-danger {
@@ -318,7 +324,9 @@ textarea {
   border-radius: var(--radius-sm);
   background: var(--color-surface);
   color: var(--color-ink);
-  transition: border-color var(--ease), box-shadow var(--ease);
+  transition:
+    border-color var(--ease),
+    box-shadow var(--ease);
 }
 .input::placeholder {
   color: #68746d;
@@ -392,4 +400,27 @@ textarea {
 .badge-neutral {
   background: var(--color-surface-2);
   color: var(--color-ink-2);
+}
+
+/* ---------- Transiciones entre páginas (withViewTransitions) ---------- */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: 180ms;
+}
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-group(*),
+  ::view-transition-old(*),
+  ::view-transition-new(*) {
+    animation: none !important;
+  }
+}
+
+/* ---------- Secciones y títulos reutilizables ---------- */
+.section-kicker {
+  font-size: var(--text-sm);
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--color-primary);
+  margin-bottom: var(--sp-2);
 }

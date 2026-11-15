@@ -1,15 +1,20 @@
 {
-  "name": "frontend",
-  "version": "0.0.0",
+  "name": "plant-disease-detector",
+  "version": "1.0.0",
+  "description": "Frontend Angular de Plant Disease Detector IA: diagnóstico de enfermedades foliares en banano, arroz y café.",
+  "private": true,
+  "packageManager": "npm@11.6.2",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build",
+    "build:dev": "ng build --configuration development",
     "watch": "ng build --watch --configuration development",
-    "test": "ng test"
+    "test": "ng test",
+    "test:ci": "ng test --watch=false",
+    "format": "prettier --write \"src/**/*.{ts,html,css}\"",
+    "format:check": "prettier --check \"src/**/*.{ts,html,css}\""
   },
-  "private": true,
-  "packageManager": "npm@11.6.2",
   "dependencies": {
     "@angular/common": "^21.2.0",
     "@angular/compiler": "^21.2.0",
@@ -21,6 +26,9 @@
     "firebase": "^12.18.0",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0"
+  },
+  "overrides": {
+    "@grpc/grpc-js": "^1.14.7"
   },
   "devDependencies": {
     "@angular/build": "^21.2.2",

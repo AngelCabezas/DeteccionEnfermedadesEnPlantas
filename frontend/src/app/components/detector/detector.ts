@@ -1,11 +1,25 @@
-import { Component, DestroyRef, ElementRef, computed, inject, signal, viewChild } from '@angular/core';
+import {
+  Component,
+  DestroyRef,
+  ElementRef,
+  computed,
+  inject,
+  signal,
+  viewChild,
+} from '@angular/core';
 import { LowerCasePipe } from '@angular/common';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { map } from 'rxjs';
 import { Crop } from '../../core/crops';
-import { ACCEPTED_TYPES, Prediction, PredictionError, PredictionService } from '../../core/prediction.service';
+import {
+  ACCEPTED_TYPES,
+  Prediction,
+  PredictionError,
+  PredictionService,
+} from '../../core/prediction.service';
 import { AppHeader } from '../shared/app-header/app-header';
+import { AppFooter } from '../shared/app-footer/app-footer';
 
 type Status = 'idle' | 'ready' | 'loading' | 'done' | 'error';
 
@@ -17,7 +31,7 @@ type Status = 'idle' | 'ready' | 'loading' | 'done' | 'error';
  */
 @Component({
   selector: 'app-detector',
-  imports: [RouterLink, LowerCasePipe, AppHeader],
+  imports: [RouterLink, LowerCasePipe, AppHeader, AppFooter],
   templateUrl: './detector.html',
   styleUrl: './detector.css',
 })
@@ -29,7 +43,9 @@ export class Detector {
   readonly fileInput = viewChild<ElementRef<HTMLInputElement>>('fileInput');
 
   /** El cultivo llega por la configuración de la ruta (app.routes.ts). */
-  readonly crop = toSignal(this.route.data.pipe(map((d) => d['crop'] as Crop)), { requireSync: true });
+  readonly crop = toSignal(this.route.data.pipe(map((d) => d['crop'] as Crop)), {
+    requireSync: true,
+  });
 
   readonly accept = ACCEPTED_TYPES.join(',');
 

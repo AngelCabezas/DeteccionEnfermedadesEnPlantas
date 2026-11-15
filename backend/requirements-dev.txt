@@ -1,0 +1,9 @@
+# Herramientas de desarrollo: pruebas, linter y conversión de modelos.
+#   pip install -r requirements.txt -r requirements-dev.txt
+pytest==8.3.3
+ruff==0.6.9
+
+# Solo necesario para convertir modelos Keras (.h5) a TFLite con scripts/convert_to_tflite.py.
+# Si solo vas a ejecutar la API no hace falta instalarlo.
+tensorflow==2.17.0
+h5py==3.11.0

@@ -30,7 +30,7 @@ export const CROPS: Record<CropId, Crop> = {
     id: 'banana',
     name: 'Banano',
     endpoint: '/banana-disease',
-    image: '/img/bananaPlants.webp',
+    image: '/img/cultivo-banano.webp',
     summary: 'Identifica sigatoka, cordana y pestalotiopsis en hojas de banano o plátano.',
     detects: ['Sigatoka', 'Mancha de Cordana', 'Pestalotiopsis', 'Hoja saludable'],
     photoTips: [
@@ -44,7 +44,7 @@ export const CROPS: Record<CropId, Crop> = {
     id: 'arroz',
     name: 'Arroz',
     endpoint: '/rice-disease',
-    image: '/img/ricePlants.webp',
+    image: '/img/cultivo-arroz.webp',
     summary: 'Detecta tizón y mancha marrón en hojas de arroz.',
     detects: ['Tizón del arroz', 'Mancha marrón', 'Hoja saludable'],
     photoTips: [
@@ -58,7 +58,7 @@ export const CROPS: Record<CropId, Crop> = {
     id: 'cafe',
     name: 'Café',
     endpoint: '/coffee-disease',
-    image: '/img/coffeePlants.webp',
+    image: '/img/cultivo-cafe.webp',
     summary: 'Reconoce roya del café y minador de la hoja.',
     detects: ['Roya del café', 'Minador de la hoja', 'Hoja saludable'],
     photoTips: [

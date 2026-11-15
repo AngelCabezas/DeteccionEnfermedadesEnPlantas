@@ -1,220 +1,254 @@
 <a class="skip-link" href="#contenido">Saltar al contenido</a>
-<app-header variant="light" />
+<div class="det-page">
+  <app-header variant="light" />
 
-<main id="contenido" class="det">
-  <div class="container">
-    <!-- Migas de pan: el usuario siempre sabe dónde está y cómo volver (H1, H3) -->
-    <nav class="det__crumbs" aria-label="Ruta de navegación">
-      <a routerLink="/dashboard">Diagnóstico</a>
-      <span aria-hidden="true">›</span>
-      <span aria-current="page">{{ crop().name }}</span>
-    </nav>
+  <main id="contenido" class="det">
+    <div class="container">
+      <!-- Migas de pan: el usuario siempre sabe dónde está y cómo volver (H1, H3) -->
+      <nav class="det__crumbs" aria-label="Ruta de navegación">
+        <a routerLink="/dashboard">Diagnóstico</a>
+        <span aria-hidden="true">›</span>
+        <span aria-current="page">{{ crop().name }}</span>
+      </nav>
 
-    <header class="det__head">
-      <h1>Diagnóstico de hojas de {{ crop().name | lowercase }}</h1>
-      <p class="det__lead">
-        Sube una fotografía de la hoja y el modelo de IA indicará si está sana o qué enfermedad
-        reconoce. Detecta:
-        @for (d of crop().detects; track d; let last = $last) {
-          <strong>{{ d }}</strong>{{ last ? '.' : ', ' }}
-        }
-      </p>
-    </header>
+      <header class="det__head">
+        <h1>Diagnóstico de hojas de {{ crop().name | lowercase }}</h1>
+        <p class="det__lead">
+          Sube una fotografía de la hoja y el modelo de IA indicará si está sana o qué enfermedad
+          reconoce. Detecta:
+          @for (d of crop().detects; track d; let last = $last) {
+            <strong>{{ d }}</strong>{{ last ? '.' : ', ' }}
+          }
+        </p>
+      </header>
 
-    <!-- Indicador de progreso en 3 pasos (H1: visibilidad del estado del sistema) -->
-    <ol class="steps" aria-label="Progreso del diagnóstico">
-      <li [class.is-current]="step() === 1" [class.is-done]="step() > 1">
-        <span class="steps__num" aria-hidden="true">1</span> Elige la foto
-      </li>
-      <li [class.is-current]="step() === 2" [class.is-done]="step() > 2">
-        <span class="steps__num" aria-hidden="true">2</span> Analiza
-      </li>
-      <li [class.is-current]="step() === 3">
-        <span class="steps__num" aria-hidden="true">3</span> Resultado
-      </li>
-    </ol>
+      <!-- Indicador de progreso en 3 pasos (H1: visibilidad del estado del sistema) -->
+      <ol class="steps" aria-label="Progreso del diagnóstico">
+        <li [class.is-current]="step() === 1" [class.is-done]="step() > 1">
+          <span class="steps__num" aria-hidden="true">1</span> Elige la foto
+        </li>
+        <li [class.is-current]="step() === 2" [class.is-done]="step() > 2">
+          <span class="steps__num" aria-hidden="true">2</span> Analiza
+        </li>
+        <li [class.is-current]="step() === 3">
+          <span class="steps__num" aria-hidden="true">3</span> Resultado
+        </li>
+      </ol>
 
-    <div class="det__grid">
-      <!-- ======================= COLUMNA PRINCIPAL ======================= -->
-      <section class="card det__panel" aria-labelledby="paso-foto">
-        <h2 id="paso-foto" class="det__panel-title">Fotografía de la hoja</h2>
+      <div class="det__grid">
+        <!-- ======================= COLUMNA PRINCIPAL ======================= -->
+        <section class="card det__panel" aria-labelledby="paso-foto">
+          <h2 id="paso-foto" class="det__panel-title">Fotografía de la hoja</h2>
 
-        <!-- Zona de carga -->
-        @if (!file()) {
-          <label
-            class="dropzone"
-            [class.is-dragging]="dragging()"
-            for="file"
-            (dragover)="onDragOver($event)"
-            (dragleave)="onDragLeave()"
-            (drop)="onDrop($event)"
-          >
-            <svg class="dropzone__icon" viewBox="0 0 24 24" width="40" height="40" aria-hidden="true">
-              <path fill="currentColor" d="M19 7v2.99s-1.99.01-2 0V7h-3s.01-1.99 0-2h3V2h2v3h3v2h-3zm-3 4V8h-3V5H5c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2v-8h-3zM5 19l3-4 2 3 3-4 4 5H5z"/>
-            </svg>
-            <span class="dropzone__title">Arrastra una imagen aquí o <u>elige un archivo</u></span>
-            <span class="dropzone__hint">JPG, PNG o WEBP · máximo 10 MB</span>
-            <input
-              #fileInput
-              id="file"
-              class="visually-hidden"
-              type="file"
-              [accept]="accept"
-              (change)="onInputChange($event)"
-              [attr.aria-invalid]="!!fileError()"
-              [attr.aria-describedby]="fileError() ? 'file-error' : null"
-            />
-          </label>
-        } @else {
-          <!-- Vista previa + acciones para cambiar/quitar (H3: control y libertad) -->
-          <div class="preview">
-            <img class="preview__img" [src]="previewUrl()" alt="Vista previa de la hoja seleccionada" />
-            <div class="preview__meta">
-              <p class="preview__name" [title]="file()!.name">{{ file()!.name }}</p>
-              <p class="preview__size">{{ fileSizeLabel() }}</p>
-              <div class="preview__actions">
-                <label class="btn btn-secondary" for="file">
-                  Cambiar imagen
-                  <input
-                    #fileInput
-                    id="file"
-                    class="visually-hidden"
-                    type="file"
-                    [accept]="accept"
-                    (change)="onInputChange($event)"
+          <!-- Zona de carga -->
+          @if (!file()) {
+            <label
+              class="dropzone"
+              [class.is-dragging]="dragging()"
+              for="file"
+              (dragover)="onDragOver($event)"
+              (dragleave)="onDragLeave()"
+              (drop)="onDrop($event)"
+            >
+              <svg
+                class="dropzone__icon"
+                viewBox="0 0 24 24"
+                width="40"
+                height="40"
+                aria-hidden="true"
+              >
+                <path
+                  fill="currentColor"
+                  d="M19 7v2.99s-1.99.01-2 0V7h-3s.01-1.99 0-2h3V2h2v3h3v2h-3zm-3 4V8h-3V5H5c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2v-8h-3zM5 19l3-4 2 3 3-4 4 5H5z"
+                />
+              </svg>
+              <span class="dropzone__title"
+                >Arrastra una imagen aquí o <u>elige un archivo</u></span
+              >
+              <span class="dropzone__hint">JPG, PNG o WEBP · máximo 10 MB</span>
+              <input
+                #fileInput
+                id="file"
+                class="visually-hidden"
+                type="file"
+                [accept]="accept"
+                (change)="onInputChange($event)"
+                [attr.aria-invalid]="!!fileError()"
+                [attr.aria-describedby]="fileError() ? 'file-error' : null"
+              />
+            </label>
+          } @else {
+            <!-- Vista previa + acciones para cambiar/quitar (H3: control y libertad) -->
+            <div class="preview">
+              <img
+                class="preview__img"
+                [src]="previewUrl()"
+                alt="Vista previa de la hoja seleccionada"
+              />
+              <div class="preview__meta">
+                <p class="preview__name" [title]="file()!.name">{{ file()!.name }}</p>
+                <p class="preview__size">{{ fileSizeLabel() }}</p>
+                <div class="preview__actions">
+                  <label class="btn btn-secondary" for="file">
+                    Cambiar imagen
+                    <input
+                      #fileInput
+                      id="file"
+                      class="visually-hidden"
+                      type="file"
+                      [accept]="accept"
+                      (change)="onInputChange($event)"
+                      [disabled]="status() === 'loading'"
+                    />
+                  </label>
+                  <button
+                    class="btn btn-ghost preview__remove"
+                    type="button"
+                    (click)="clearFile()"
                     [disabled]="status() === 'loading'"
-                  />
-                </label>
-                <button class="btn btn-ghost preview__remove" type="button" (click)="clearFile()" [disabled]="status() === 'loading'">
-                  Quitar
-                </button>
+                  >
+                    Quitar
+                  </button>
+                </div>
               </div>
             </div>
-          </div>
-        }
-
-        @if (fileError(); as err) {
-          <p id="file-error" class="alert alert-danger" role="alert">{{ err }}</p>
-        }
-
-        <!-- Acción principal -->
-        <div class="det__actions">
-          <button
-            class="btn btn-primary btn-lg"
-            type="button"
-            (click)="analyze()"
-            [disabled]="!file() || status() === 'loading'"
-          >
-            @if (status() === 'loading') {
-              <span class="spinner" aria-hidden="true"></span> Analizando…
-            } @else if (status() === 'done') {
-              Analizar de nuevo
-            } @else {
-              Analizar hoja
-            }
-          </button>
-          @if (!file()) {
-            <span class="det__actions-hint">Primero selecciona una fotografía.</span>
           }
-        </div>
 
-        <!-- Región viva: los lectores de pantalla anuncian el cambio de estado -->
-        <div class="det__status" aria-live="polite" aria-atomic="true">
-          @switch (status()) {
-            @case ('loading') {
-              <div class="alert alert-info">
-                <span class="spinner" aria-hidden="true"></span>
-                <div>
-                  <strong>Analizando la imagen…</strong>
-                  Normalmente tarda unos segundos. Si el servidor estaba inactivo, la primera vez puede tardar hasta un minuto.
-                </div>
-              </div>
+          @if (fileError(); as err) {
+            <p id="file-error" class="alert alert-danger" role="alert">{{ err }}</p>
+          }
+
+          <!-- Acción principal -->
+          <div class="det__actions">
+            <button
+              class="btn btn-primary btn-lg"
+              type="button"
+              (click)="analyze()"
+              [disabled]="!file() || status() === 'loading'"
+            >
+              @if (status() === 'loading') {
+                <span class="spinner" aria-hidden="true"></span> Analizando…
+              } @else if (status() === 'done') {
+                Analizar de nuevo
+              } @else {
+                Analizar hoja
+              }
+            </button>
+            @if (!file()) {
+              <span class="det__actions-hint">Primero selecciona una fotografía.</span>
             }
-            @case ('error') {
-              <div class="alert alert-danger" role="alert">
-                <div>
-                  <strong>No se pudo completar el análisis</strong>
-                  {{ requestError()?.message }}
-                  @if (requestError()?.retryable) {
-                    <div class="det__retry">
-                      <button class="btn btn-secondary" type="button" (click)="analyze()">Reintentar</button>
-                    </div>
-                  }
-                </div>
-              </div>
-            }
-            @case ('done') {
-              @if (result(); as r) {
-                <article class="result" [class]="'result result--' + r.severity" aria-labelledby="resultado-titulo">
-                  <span
-                    class="badge"
-                    [class.badge-success]="r.severity === 'healthy'"
-                    [class.badge-danger]="r.severity === 'disease'"
-                    [class.badge-warning]="r.severity === 'pest'"
-                  >
-                    {{ severityLabel(r.severity) }}
-                  </span>
-                  <h3 id="resultado-titulo" class="result__title">{{ r.label }}</h3>
-                  <p class="result__desc">{{ r.description }}</p>
+          </div>
 
-                  @if (confidencePct() !== null) {
-                    <div class="confidence">
-                      <div class="confidence__row">
-                        <span>Confianza del modelo</span>
-                        <strong>{{ confidencePct() }} %</strong>
-                      </div>
-                      <div
-                        class="confidence__bar"
-                        role="progressbar"
-                        aria-label="Confianza del modelo"
-                        [attr.aria-valuenow]="confidencePct()"
-                        aria-valuemin="0"
-                        aria-valuemax="100"
-                      >
-                        <span [style.width.%]="confidencePct()"></span>
-                      </div>
-                      @if (confidencePct()! < 70) {
-                        <p class="confidence__note">
-                          Confianza baja: prueba con otra fotografía más nítida o mejor iluminada.
-                        </p>
-                      }
-                    </div>
-                  }
-
-                  <p class="result__disclaimer">
-                    Este resultado es una ayuda para la observación, no un diagnóstico definitivo.
-                    Ante dudas, consulta con un técnico agrícola.
-                  </p>
-
-                  <div class="result__actions">
-                    <button class="btn btn-secondary" type="button" (click)="clearFile()">Analizar otra hoja</button>
-                    <a class="btn btn-ghost" routerLink="/dashboard">Elegir otro cultivo</a>
+          <!-- Región viva: los lectores de pantalla anuncian el cambio de estado -->
+          <div class="det__status" aria-live="polite" aria-atomic="true">
+            @switch (status()) {
+              @case ('loading') {
+                <div class="alert alert-info">
+                  <span class="spinner" aria-hidden="true"></span>
+                  <div>
+                    <strong>Analizando la imagen…</strong>
+                    Normalmente tarda unos segundos. Si el servidor estaba inactivo, la primera vez
+                    puede tardar hasta un minuto.
                   </div>
-                </article>
+                </div>
+              }
+              @case ('error') {
+                <div class="alert alert-danger" role="alert">
+                  <div>
+                    <strong>No se pudo completar el análisis</strong>
+                    {{ requestError()?.message }}
+                    @if (requestError()?.retryable) {
+                      <div class="det__retry">
+                        <button class="btn btn-secondary" type="button" (click)="analyze()">
+                          Reintentar
+                        </button>
+                      </div>
+                    }
+                  </div>
+                </div>
+              }
+              @case ('done') {
+                @if (result(); as r) {
+                  <article
+                    class="result"
+                    [class]="'result result--' + r.severity"
+                    aria-labelledby="resultado-titulo"
+                  >
+                    <span
+                      class="badge"
+                      [class.badge-success]="r.severity === 'healthy'"
+                      [class.badge-danger]="r.severity === 'disease'"
+                      [class.badge-warning]="r.severity === 'pest'"
+                    >
+                      {{ severityLabel(r.severity) }}
+                    </span>
+                    <h3 id="resultado-titulo" class="result__title">{{ r.label }}</h3>
+                    <p class="result__desc">{{ r.description }}</p>
+
+                    @if (confidencePct() !== null) {
+                      <div class="confidence">
+                        <div class="confidence__row">
+                          <span>Confianza del modelo</span>
+                          <strong>{{ confidencePct() }} %</strong>
+                        </div>
+                        <div
+                          class="confidence__bar"
+                          role="progressbar"
+                          aria-label="Confianza del modelo"
+                          [attr.aria-valuenow]="confidencePct()"
+                          aria-valuemin="0"
+                          aria-valuemax="100"
+                        >
+                          <span [style.width.%]="confidencePct()"></span>
+                        </div>
+                        @if (confidencePct()! < 70) {
+                          <p class="confidence__note">
+                            Confianza baja: prueba con otra fotografía más nítida o mejor iluminada.
+                          </p>
+                        }
+                      </div>
+                    }
+
+                    <p class="result__disclaimer">
+                      Este resultado es una ayuda para la observación, no un diagnóstico definitivo.
+                      Ante dudas, consulta con un técnico agrícola.
+                    </p>
+
+                    <div class="result__actions">
+                      <button class="btn btn-secondary" type="button" (click)="clearFile()">
+                        Analizar otra hoja
+                      </button>
+                      <a class="btn btn-ghost" routerLink="/dashboard">Elegir otro cultivo</a>
+                    </div>
+                  </article>
+                }
               }
             }
-          }
-        </div>
-      </section>
-
-      <!-- ======================= COLUMNA LATERAL ======================= -->
-      <aside class="det__aside">
-        <section class="card det__tips" aria-labelledby="tips-titulo">
-          <h2 id="tips-titulo" class="det__panel-title">Consejos para una buena foto</h2>
-          <ul>
-            @for (tip of crop().photoTips; track tip) {
-              <li>{{ tip }}</li>
-            }
-          </ul>
+          </div>
         </section>
 
-        <div class="alert alert-warning" role="note">
-          <div>
-            <strong>Usa el detector correcto</strong>
-            El modelo asume que la hoja es de {{ crop().name | lowercase }}. Una foto de otro cultivo dará un resultado sin sentido.
+        <!-- ======================= COLUMNA LATERAL ======================= -->
+        <aside class="det__aside">
+          <section class="card det__tips" aria-labelledby="tips-titulo">
+            <h2 id="tips-titulo" class="det__panel-title">Consejos para una buena foto</h2>
+            <ul>
+              @for (tip of crop().photoTips; track tip) {
+                <li>{{ tip }}</li>
+              }
+            </ul>
+          </section>
+
+          <div class="alert alert-warning" role="note">
+            <div>
+              <strong>Usa el detector correcto</strong>
+              El modelo asume que la hoja es de {{ crop().name | lowercase }}. Una foto de otro
+              cultivo dará un resultado sin sentido.
+            </div>
           </div>
-        </div>
-      </aside>
+        </aside>
+      </div>
     </div>
-  </div>
-</main>
+  </main>
+
+  <app-footer variant="light" />
+</div>

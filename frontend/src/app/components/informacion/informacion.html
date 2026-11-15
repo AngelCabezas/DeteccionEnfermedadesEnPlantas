@@ -1,70 +1,286 @@
 <a class="skip-link" href="#contenido">Saltar al contenido</a>
-<div class="info">
-  <app-header variant="dark" />
+<div class="about">
+  <app-header variant="light" />
 
   <main id="contenido">
-    <section class="info__hero">
+    <!-- ================= HERO ================= -->
+    <section class="hero">
+      <div class="container hero__grid">
+        <div class="hero__text">
+          <p class="hero__kicker">Sobre el proyecto</p>
+          <h1>Inteligencia artificial al servicio del campo</h1>
+          <p class="hero__lead">
+            Plant Disease Detector IA ayuda a agricultores, estudiantes y técnicos a reconocer
+            enfermedades foliares con una sola fotografía, sin equipos especializados y sin salir
+            del cultivo.
+          </p>
+          <div class="hero__actions">
+            <a class="btn btn-primary btn-lg" routerLink="/login">Probar la herramienta</a>
+            <a class="btn btn-ghost btn-lg" href="#tecnologia">Cómo funciona</a>
+          </div>
+        </div>
+
+        <div class="collage" aria-hidden="true">
+          @for (crop of crops; track crop.id; let i = $index) {
+            <figure class="collage__card" [style.--i]="i">
+              <img [src]="crop.image" alt="" loading="eager" />
+              <figcaption>{{ crop.name }}</figcaption>
+            </figure>
+          }
+        </div>
+      </div>
+
       <div class="container">
-        <p class="info__kicker">Sobre nosotros</p>
-        <h1>Inteligencia artificial al servicio del campo</h1>
-        <p class="info__lead">
-          Combinamos aprendizaje automático y sostenibilidad para ofrecer una herramienta de apoyo
-          accesible en la detección temprana de enfermedades agrícolas.
-        </p>
+        <ul class="stats" aria-label="Datos clave">
+          @for (s of stats; track s.label) {
+            <li>
+              <strong>{{ s.value }}</strong>
+              <span>{{ s.label }}</span>
+            </li>
+          }
+        </ul>
       </div>
     </section>
 
-    <section class="container info__grid">
-      <article class="card info__card">
-        <img src="/img/SobreNosotros.png" alt="" loading="lazy" />
-        <h2>Nuestra misión</h2>
-        <p>
-          Reducir las pérdidas por enfermedades foliares poniendo tecnología sencilla en manos de
-          agricultores, estudiantes y técnicos, sin necesidad de equipos especializados: basta un
-          teléfono con cámara.
-        </p>
-      </article>
+    <!-- ================= EL RETO ================= -->
+    <section class="section" aria-labelledby="reto-titulo">
+      <div class="container split">
+        <div>
+          <p class="section-kicker">El reto</p>
+          <h2 id="reto-titulo" class="section-title">
+            Las enfermedades foliares se detectan tarde
+          </h2>
+          <p class="section-lead">
+            Una mancha en una hoja puede ser el inicio de una pérdida importante. El problema no
+            suele ser la falta de tratamiento, sino no saber a tiempo qué está pasando.
+          </p>
+        </div>
+        <ol class="challenges">
+          @for (c of challenges; track c.title; let i = $index) {
+            <li>
+              <span class="challenges__num" aria-hidden="true">{{ i + 1 }}</span>
+              <div>
+                <h3>{{ c.title }}</h3>
+                <p>{{ c.text }}</p>
+              </div>
+            </li>
+          }
+        </ol>
+      </div>
+    </section>
 
-      <article class="card info__card">
-        <img src="/img/NuestroEnfoque.png" alt="" loading="lazy" />
-        <h2>Nuestro enfoque</h2>
-        <ul class="info__list">
-          <li><strong>Sostenibilidad:</strong> detectar a tiempo evita tratamientos innecesarios.</li>
-          <li><strong>Innovación:</strong> un modelo especializado por cultivo.</li>
-          <li><strong>Accesibilidad:</strong> interfaz simple, en español y para cualquier dispositivo.</li>
-        </ul>
-      </article>
+    <!-- ================= MISIÓN ================= -->
+    <section class="section section--alt" aria-labelledby="mision-titulo">
+      <div class="container row">
+        <img
+          class="row__img"
+          src="/img/nuestro-enfoque.webp"
+          alt="Ilustración de una plantación de café en una ladera"
+          loading="lazy"
+          width="441"
+          height="293"
+        />
+        <div>
+          <p class="section-kicker">Nuestra misión</p>
+          <h2 id="mision-titulo" class="section-title">
+            Tecnología sencilla en manos de quien cultiva
+          </h2>
+          <p>
+            Reducir las pérdidas por enfermedades foliares poniendo una herramienta de apoyo al
+            alcance de cualquiera: basta un teléfono con cámara y conexión a internet.
+          </p>
+          <p>
+            Cada cultivo tiene su propio modelo, entrenado con imágenes de hojas sanas y enfermas.
+            El objetivo es apoyar la observación en campo para decidir a tiempo.
+          </p>
+        </div>
+      </div>
+    </section>
 
-      <article class="card info__card">
-        <h2>Qué ofrecemos</h2>
-        <ul class="info__list">
-          <li>Diagnóstico en segundos a partir de una foto.</li>
-          <li>Descripción de cada enfermedad y nivel de confianza del modelo.</li>
-          <li>Consejos para tomar fotografías que mejoren el resultado.</li>
-        </ul>
-        <div class="alert alert-info">
-          <div>
-            <strong>Alcance</strong>
-            Es una ayuda a la observación, no sustituye la valoración de un profesional agrónomo.
+    <!-- ================= ENFOQUE ================= -->
+    <section class="section" aria-labelledby="enfoque-titulo">
+      <div class="container row row--reverse">
+        <!-- Reproducción estática de la tarjeta de resultado -->
+        <div class="mock" aria-hidden="true">
+          <div class="mock__bar"><span></span><span></span><span></span></div>
+          <div class="mock__body">
+            <span class="badge badge-danger">Enfermedad detectada</span>
+            <p class="mock__title">Sigatoka</p>
+            <p class="mock__desc">
+              Enfermedad fúngica grave que forma estrías y manchas oscuras que reducen la
+              fotosíntesis.
+            </p>
+            <div class="mock__conf">
+              <div><span>Confianza del modelo</span><strong>93 %</strong></div>
+              <div class="mock__track"><span style="width: 93%"></span></div>
+            </div>
           </div>
         </div>
-      </article>
+        <div>
+          <p class="section-kicker">Nuestro enfoque</p>
+          <h2 id="enfoque-titulo" class="section-title">Resultados que se entienden</h2>
+          <p class="section-lead">
+            No devolvemos un código de clase: cada diagnóstico llega con nombre en español,
+            descripción, nivel de confianza y qué hacer a continuación.
+          </p>
+          <ul class="principles">
+            @for (p of principles; track p.title) {
+              <li>
+                <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true">
+                  <path fill="currentColor" d="M9 16.2 4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4z" />
+                </svg>
+                <div>
+                  <h3>{{ p.title }}</h3>
+                  <p>{{ p.text }}</p>
+                </div>
+              </li>
+            }
+          </ul>
+        </div>
+      </div>
+    </section>
 
-      <article class="card info__card info__contact">
-        <img class="info__logo" src="/img/Logo.png" alt="" width="80" height="80" />
-        <h2>Contacto</h2>
-        <ul class="info__list info__list--plain">
-          <li><strong>Correo:</strong> <a href="mailto:plant.disease@gmail.com">plant.disease&#64;gmail.com</a></li>
-          <li><strong>Teléfono:</strong> <a href="tel:+593984931545">098 493 1545</a></li>
-          <li><strong>Facebook:</strong> PlantDiseaseAI</li>
-          <li><strong>Instagram:</strong> &#64;plantdisease.ai</li>
-        </ul>
-        <a class="btn btn-primary" routerLink="/login">Probar la herramienta</a>
-      </article>
+    <!-- ================= TECNOLOGÍA ================= -->
+    <section id="tecnologia" class="section section--dark" aria-labelledby="tec-titulo">
+      <div class="container">
+        <p class="section-kicker">Tecnología</p>
+        <h2 id="tec-titulo" class="section-title">De la foto al diagnóstico</h2>
+
+        <ol class="pipeline" aria-label="Flujo de procesamiento">
+          @for (step of pipeline; track step; let last = $last) {
+            <li>
+              <span>{{ step }}</span>
+              @if (!last) {
+                <svg
+                  class="pipeline__arrow"
+                  viewBox="0 0 24 24"
+                  width="20"
+                  height="20"
+                  aria-hidden="true"
+                >
+                  <path
+                    fill="currentColor"
+                    d="M12 4l-1.4 1.4 5.6 5.6H4v2h12.2l-5.6 5.6L12 20l8-8z"
+                  />
+                </svg>
+              }
+            </li>
+          }
+        </ol>
+
+        <div class="stack">
+          @for (s of stack; track s.title) {
+            <article class="stack__item">
+              <h3>{{ s.title }}</h3>
+              <p>{{ s.text }}</p>
+            </article>
+          }
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= HISTORIA ================= -->
+    <section class="section" aria-labelledby="historia-titulo">
+      <div class="container">
+        <p class="section-kicker">Historia</p>
+        <h2 id="historia-titulo" class="section-title">Cómo ha evolucionado</h2>
+        <ol class="timeline">
+          @for (t of timeline; track t.title) {
+            <li>
+              <h3>{{ t.title }}</h3>
+              <p>{{ t.text }}</p>
+            </li>
+          }
+        </ol>
+      </div>
+    </section>
+
+    <!-- ================= PREGUNTAS ================= -->
+    <section class="section section--alt" aria-labelledby="faq-titulo">
+      <div class="container split">
+        <div>
+          <p class="section-kicker">Preguntas frecuentes</p>
+          <h2 id="faq-titulo" class="section-title">Lo que suelen preguntarnos</h2>
+          <p class="section-lead">¿Tienes otra duda? Escríbenos y te respondemos.</p>
+          <a class="btn btn-secondary" href="mailto:plant.disease@gmail.com">Escribir un correo</a>
+        </div>
+        <div class="faq">
+          @for (f of faqs; track f.title) {
+            <details class="faq__item">
+              <summary>{{ f.title }}</summary>
+              <p>{{ f.text }}</p>
+            </details>
+          }
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= EQUIPO Y CONTACTO ================= -->
+    <section class="section" aria-labelledby="equipo-titulo">
+      <div class="container team">
+        <article class="card team__card">
+          <span class="team__avatar" aria-hidden="true">AC</span>
+          <div>
+            <p class="section-kicker">Desarrollo</p>
+            <h2 id="equipo-titulo" class="team__name">Angel Cabezas</h2>
+            <p class="team__role">Ingeniero de Software · Escuela Politécnica Nacional</p>
+            <p>
+              Proyecto nacido como iniciativa de investigación académica y evolucionado a una
+              plataforma web completa: Angular en el frontend y Python (Flask) sirviendo los
+              modelos.
+            </p>
+            <div class="team__links">
+              <a
+                class="btn btn-secondary"
+                href="https://www.linkedin.com/in/angel-cabezas-6065021a8"
+                target="_blank"
+                rel="noopener"
+              >
+                LinkedIn <span class="visually-hidden">(se abre en una pestaña nueva)</span>
+              </a>
+              <a
+                class="btn btn-secondary"
+                href="https://github.com/AngelCabezas"
+                target="_blank"
+                rel="noopener"
+              >
+                GitHub <span class="visually-hidden">(se abre en una pestaña nueva)</span>
+              </a>
+            </div>
+          </div>
+        </article>
+
+        <aside class="card team__contact">
+          <h2 class="team__contact-title">Contacto del proyecto</h2>
+          <ul>
+            <li>
+              <span>Correo</span
+              ><a href="mailto:plant.disease@gmail.com">plant.disease&#64;gmail.com</a>
+            </li>
+            <li><span>Teléfono</span><a href="tel:+593984931545">098 493 1545</a></li>
+            <li><span>Facebook</span>PlantDiseaseAI</li>
+            <li><span>Instagram</span>&#64;plantdisease.ai</li>
+          </ul>
+          <img
+            src="/img/logo-fis.webp"
+            alt="Facultad de Ingeniería de Sistemas, Escuela Politécnica Nacional"
+            width="96"
+            height="83"
+            loading="lazy"
+          />
+        </aside>
+      </div>
+    </section>
+
+    <!-- ================= CTA ================= -->
+    <section class="cta">
+      <div class="container cta__inner">
+        <h2>Pruébalo con una hoja de tu cultivo</h2>
+        <p>Crea tu cuenta gratuita y obtén un diagnóstico en segundos.</p>
+        <a class="btn btn-primary btn-lg" routerLink="/login">Empezar ahora</a>
+      </div>
     </section>
   </main>
 
-  <footer class="info__footer">
-    <p>© 2026 Plant Disease Detector IA. Todos los derechos reservados.</p>
-  </footer>
+  <app-footer variant="light" />
 </div>

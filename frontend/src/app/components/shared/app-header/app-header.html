@@ -1,8 +1,16 @@
 <header class="hdr" [class.hdr--dark]="variant() === 'dark'">
   <div class="container hdr__inner">
-    <a class="hdr__brand" routerLink="/home" (click)="closeMenu()" aria-label="Plant Disease Detector IA, ir al inicio">
-      <img src="/img/Logo.png" alt="" width="40" height="40" />
-      <span>PD-IA</span>
+    <a
+      class="hdr__brand"
+      routerLink="/home"
+      (click)="closeMenu()"
+      aria-label="Plant Disease Detector IA, ir al inicio"
+    >
+      <img src="/img/logo.svg" alt="" width="40" height="40" />
+      <span class="hdr__brand-text">
+        <span class="hdr__brand-name">Plant Disease Detector</span>
+        <span class="hdr__brand-tag">IA</span>
+      </span>
     </a>
 
     <button
@@ -11,7 +19,7 @@
       (click)="toggleMenu()"
       [attr.aria-expanded]="menuOpen()"
       aria-controls="main-nav"
-      aria-label="Abrir menú de navegación"
+      [attr.aria-label]="menuOpen() ? 'Cerrar menú de navegación' : 'Abrir menú de navegación'"
     >
       <span class="hdr__bar"></span>
       <span class="hdr__bar"></span>
@@ -19,24 +27,53 @@
     </button>
 
     <nav id="main-nav" class="hdr__nav" [class.is-open]="menuOpen()" aria-label="Principal">
-      <a routerLink="/home" routerLinkActive="is-active" ariaCurrentWhenActive="page" (click)="closeMenu()">Inicio</a>
+      <a
+        routerLink="/home"
+        routerLinkActive="is-active"
+        ariaCurrentWhenActive="page"
+        (click)="closeMenu()"
+        >Inicio</a
+      >
       @if (user()) {
-        <a routerLink="/dashboard" routerLinkActive="is-active" ariaCurrentWhenActive="page" (click)="closeMenu()">Diagnóstico</a>
+        <a
+          routerLink="/dashboard"
+          routerLinkActive="is-active"
+          ariaCurrentWhenActive="page"
+          (click)="closeMenu()"
+          >Diagnóstico</a
+        >
       }
-      <a routerLink="/informacion" routerLinkActive="is-active" ariaCurrentWhenActive="page" (click)="closeMenu()">Sobre nosotros</a>
+      <a
+        routerLink="/informacion"
+        routerLinkActive="is-active"
+        ariaCurrentWhenActive="page"
+        (click)="closeMenu()"
+        >Sobre el proyecto</a
+      >
 
       @if (user(); as u) {
         <span class="hdr__user" [title]="u.email ?? ''">
           {{ u.displayName || u.email }}
         </span>
-        <button class="btn btn-ghost hdr__cta" type="button" (click)="logout()" [disabled]="signingOut()">
+        <button
+          class="btn btn-ghost hdr__cta"
+          type="button"
+          (click)="logout()"
+          [disabled]="signingOut()"
+        >
           @if (signingOut()) {
             <span class="spinner" aria-hidden="true"></span>
           }
           Cerrar sesión
         </button>
       } @else {
-        <a class="btn btn-primary hdr__cta" routerLink="/login" (click)="closeMenu()">Iniciar sesión</a>
+        <a
+          class="btn btn-primary hdr__cta"
+          routerLink="/login"
+          routerLinkActive="is-here"
+          (click)="closeMenu()"
+          >Iniciar sesión</a
+        >
       }
     </nav>
   </div>

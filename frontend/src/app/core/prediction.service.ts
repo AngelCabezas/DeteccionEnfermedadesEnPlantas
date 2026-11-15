@@ -18,7 +18,10 @@ export const ACCEPTED_TYPES = ['image/jpeg', 'image/png', 'image/webp'];
 
 /** Mensaje de error entendible por el usuario (heurística 9: ayudar a reconocer y recuperarse de errores). */
 export class PredictionError extends Error {
-  constructor(message: string, public readonly retryable = true) {
+  constructor(
+    message: string,
+    public readonly retryable = true,
+  ) {
     super(message);
   }
 }
@@ -56,7 +59,8 @@ export class PredictionService {
 
   private toUserError(err: unknown): PredictionError {
     if (err instanceof HttpErrorResponse) {
-      const serverMsg = (err.error && typeof err.error === 'object' && err.error.error) as string | undefined;
+      const serverMsg = (err.error && typeof err.error === 'object' && err.error.error) as
+        string | undefined;
       if (err.status === 0) {
         return new PredictionError(
           'No se pudo conectar con el servidor. Revisa tu conexión a internet; si el servidor estaba inactivo puede tardar un minuto en responder.',
@@ -66,12 +70,19 @@ export class PredictionService {
         return new PredictionError(serverMsg ?? 'La imagen no es válida.', false);
       }
       if (err.status === 503) {
-        return new PredictionError(serverMsg ?? 'El modelo de este cultivo no está disponible por ahora.', false);
+        return new PredictionError(
+          serverMsg ?? 'El modelo de este cultivo no está disponible por ahora.',
+          false,
+        );
       }
-      return new PredictionError(serverMsg ?? 'El servidor devolvió un error inesperado. Inténtalo de nuevo.');
+      return new PredictionError(
+        serverMsg ?? 'El servidor devolvió un error inesperado. Inténtalo de nuevo.',
+      );
     }
     if (err instanceof Error && err.name === 'TimeoutError') {
-      return new PredictionError('El análisis tardó demasiado. Inténtalo de nuevo en unos segundos.');
+      return new PredictionError(
+        'El análisis tardó demasiado. Inténtalo de nuevo en unos segundos.',
+      );
     }
     return new PredictionError('Ocurrió un error inesperado. Inténtalo de nuevo.');
   }

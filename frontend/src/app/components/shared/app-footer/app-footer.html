@@ -1,0 +1,40 @@
+<footer class="ftr" [class.ftr--dark]="variant() === 'dark'">
+  <div class="container ftr__inner">
+    <div class="ftr__brand">
+      <img src="/img/logo.svg" alt="" width="44" height="44" />
+      <div>
+        <p class="ftr__name">Plant Disease Detector IA</p>
+        <p class="ftr__tagline">Diagnóstico de enfermedades foliares en banano, arroz y café.</p>
+      </div>
+    </div>
+
+    <nav class="ftr__nav" aria-label="Pie de página">
+      <a routerLink="/home">Inicio</a>
+      <a routerLink="/informacion">Sobre el proyecto</a>
+      @if (user()) {
+        <a routerLink="/dashboard">Diagnóstico</a>
+      } @else {
+        <a routerLink="/login">Acceder</a>
+      }
+      <a href="https://github.com/AngelCabezas" target="_blank" rel="noopener">
+        GitHub <span class="visually-hidden">(se abre en una pestaña nueva)</span>
+      </a>
+    </nav>
+
+    <div class="ftr__inst">
+      <img
+        src="/img/logo-fis.webp"
+        alt="Facultad de Ingeniería de Sistemas"
+        width="52"
+        height="45"
+        loading="lazy"
+      />
+      <p>Proyecto académico<br />Escuela Politécnica Nacional</p>
+    </div>
+  </div>
+
+  <div class="container ftr__bottom">
+    <p>© {{ year }} Plant Disease Detector IA.</p>
+    <p>El resultado es orientativo y no sustituye la evaluación de un profesional agrónomo.</p>
+  </div>
+</footer>

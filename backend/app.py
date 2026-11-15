@@ -1,31 +1,32 @@
 """
 API de detección de enfermedades en plantas (banano, arroz y café).
 
-Mejoras respecto a la versión anterior:
-- Los modelos se cargan una sola vez (bajo demanda) y se mantienen en memoria.
-  Antes se cargaban y destruían en cada petición, lo que hacía cada diagnóstico
-  varios segundos más lento sin reducir realmente la memoria del proceso.
-- Validación de entrada: tipo de archivo, tamaño máximo e imagen decodificable.
-  Un archivo inválido devuelve 400 con un mensaje claro en vez de un 500.
-- La ruta de café está habilitada. Si el modelo no puede cargarse, la API
-  responde 503 con una explicación en lugar de 404.
-- Respuesta enriquecida: etiqueta legible en español, confianza y descripción,
-  manteniendo la clave `prediction` por compatibilidad con el frontend antiguo.
-- Errores siempre en JSON, CORS configurable por variable de entorno,
-  endpoint /health para monitoreo y debug desactivado por defecto.
+Expone un endpoint por cultivo que recibe una imagen (multipart/form-data, campo
+`file`) y devuelve la clase predicha con etiqueta legible, descripción, severidad
+y confianza. Los modelos se cargan bajo demanda una sola vez y se mantienen en
+memoria; la entrada se valida (formato, tamaño, decodificación) y los errores se
+devuelven siempre en JSON.
+
+Configuración por variables de entorno: ver .env.example.
 """
 
+import io
 import logging
 import os
 import threading
-from typing import Any, Callable
+from collections.abc import Callable
+from typing import Any
 
 import cv2
 import joblib
 import numpy as np
 from flask import Flask, jsonify, request
 from flask_cors import CORS
-from werkzeug.exceptions import HTTPException, RequestEntityTooLarge
+from flask_limiter import Limiter
+from flask_limiter.util import get_remote_address
+from PIL import Image, UnidentifiedImageError
+from werkzeug.exceptions import HTTPException, RequestEntityTooLarge, TooManyRequests
+from werkzeug.middleware.proxy_fix import ProxyFix
 
 # ---------------------------------------------------------------------------
 # 1. CONFIGURACIÓN
@@ -33,20 +34,62 @@ from werkzeug.exceptions import HTTPException, RequestEntityTooLarge
 logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s")
 log = logging.getLogger("plantas-api")
 
+API_VERSION = "1.0.0"
+
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 MODELS_DIR = os.path.join(BASE_DIR, "modelos")
 
 MAX_UPLOAD_MB = int(os.environ.get("MAX_UPLOAD_MB", "10"))
+# Límite de píxeles decodificados: evita "bombas de descompresión" (un PNG de pocos KB
+# que al abrirse ocupa gigabytes). 25 MP cubre cualquier foto de móvil actual.
+MAX_IMAGE_PIXELS = int(os.environ.get("MAX_IMAGE_PIXELS", str(25_000_000)))
 ALLOWED_MIME = {"image/jpeg", "image/png", "image/webp"}
 ALLOWED_EXT = {".jpg", ".jpeg", ".png", ".webp"}
+# Formatos reales (por contenido, no por extensión) que se pasan al decodificador.
+ALLOWED_FORMATS = {"JPEG", "PNG", "WEBP"}
+# Peticiones por IP a los endpoints de predicción (la inferencia es costosa).
+RATE_LIMIT = os.environ.get("RATE_LIMIT", "30 per minute")
+
+Image.MAX_IMAGE_PIXELS = MAX_IMAGE_PIXELS
 
 app = Flask(__name__)
 app.config["MAX_CONTENT_LENGTH"] = MAX_UPLOAD_MB * 1024 * 1024
+# Solo esperamos un archivo por petición: acota el trabajo del parser multipart.
+app.config["MAX_FORM_PARTS"] = 10
+
+# Detrás de un proxy inverso (Render, Nginx) la IP real llega en X-Forwarded-For.
+# Sin esto el límite de peticiones se aplicaría a la IP del proxy, es decir, a todos.
+if os.environ.get("TRUST_PROXY", "1") == "1":
+    app.wsgi_app = ProxyFix(app.wsgi_app, x_for=1, x_proto=1, x_host=1)  # type: ignore[method-assign]
 
 # En producción conviene restringir los orígenes:
 #   ALLOWED_ORIGINS="https://mi-frontend.web.app,https://otro-dominio.com"
 allowed_origins = os.environ.get("ALLOWED_ORIGINS", "*")
-CORS(app, origins=[o.strip() for o in allowed_origins.split(",")] if allowed_origins != "*" else "*")
+CORS(
+    app,
+    origins=[o.strip() for o in allowed_origins.split(",")] if allowed_origins != "*" else "*",
+    methods=["GET", "POST", "OPTIONS"],
+    max_age=600,
+)
+
+limiter = Limiter(
+    get_remote_address,
+    app=app,
+    storage_uri="memory://",
+    headers_enabled=True,
+    enabled=os.environ.get("RATE_LIMIT_ENABLED", "1") == "1",
+)
+
+
+@app.after_request
+def security_headers(response):
+    """Cabeceras defensivas para una API JSON: nada se cachea ni se interpreta como HTML."""
+    response.headers.setdefault("X-Content-Type-Options", "nosniff")
+    response.headers.setdefault("Cache-Control", "no-store")
+    response.headers.setdefault("Referrer-Policy", "no-referrer")
+    response.headers.setdefault("Content-Security-Policy", "default-src 'none'; frame-ancestors 'none'")
+    return response
+
 
 # ---------------------------------------------------------------------------
 # 2. CATÁLOGO DE CULTIVOS Y CLASES
@@ -152,9 +195,11 @@ def _tflite_interpreter_class():
     """Prefiere el runtime ligero (ai-edge-litert, ~50 MB) sobre TensorFlow completo (~500 MB)."""
     try:
         from ai_edge_litert.interpreter import Interpreter  # type: ignore
+
         return Interpreter
     except ImportError:
         import tensorflow as tf  # import diferido: TF tarda varios segundos en importarse
+
         return tf.lite.Interpreter
 
 
@@ -207,7 +252,27 @@ def _read_upload() -> bytes:
     data = file.read()
     if not data:
         raise InvalidImage("El archivo está vacío.")
+    _check_image(data)
     return data
+
+
+def _check_image(data: bytes) -> None:
+    """
+    Inspecciona la cabecera (sin decodificar los píxeles) para comprobar que el
+    contenido es realmente JPEG/PNG/WEBP y que su tamaño en píxeles es razonable.
+    Así el decodificador completo solo recibe formatos esperados y acotados.
+    """
+    try:
+        with Image.open(io.BytesIO(data)) as im:
+            fmt, (width, height) = im.format, im.size
+    except Image.DecompressionBombError as exc:
+        raise InvalidImage("La imagen tiene demasiados píxeles. Usa una foto de menor resolución.") from exc
+    except (UnidentifiedImageError, OSError, ValueError) as exc:
+        raise InvalidImage("No se pudo leer la imagen. Verifica que el archivo no esté dañado.") from exc
+    if fmt not in ALLOWED_FORMATS:
+        raise InvalidImage("Formato no admitido. Sube una imagen JPG, PNG o WEBP.")
+    if width * height > MAX_IMAGE_PIXELS:
+        raise InvalidImage(f"La imagen es demasiado grande ({width}×{height} px). Usa una foto de menor resolución.")
 
 
 def _decode(img_bytes: bytes) -> np.ndarray:
@@ -251,7 +316,8 @@ def _build_response(crop: str, class_key: str, confidence: float | None) -> dict
 def home():
     return jsonify(
         {
-            "mensaje": "API de detección de enfermedades en plantas funcionando.",
+            "name": "Plant Disease Detector API",
+            "version": API_VERSION,
             "endpoints": ["/banana-disease", "/rice-disease", "/coffee-disease", "/health"],
         }
     )
@@ -262,13 +328,19 @@ def health():
     return jsonify(
         {
             "status": "ok",
+            "version": API_VERSION,
             "models_loaded": sorted(_models.keys()),
-            "coffee_model_available": os.path.exists(COFFEE_MODEL_TFLITE) or os.path.exists(COFFEE_MODEL_H5),
+            "models_available": {
+                "banana": os.path.exists(BANANA_MODEL),
+                "rice": os.path.exists(RICE_MODEL),
+                "coffee": os.path.exists(COFFEE_MODEL_TFLITE) or os.path.exists(COFFEE_MODEL_H5),
+            },
         }
     )
 
 
 @app.post("/banana-disease")
+@limiter.limit(RATE_LIMIT)
 def banana_disease():
     img_array = preprocess_cnn(_read_upload())
     interpreter = _get_model("banana", lambda: _load_tflite(BANANA_MODEL))
@@ -278,6 +350,7 @@ def banana_disease():
 
 
 @app.post("/rice-disease")
+@limiter.limit(RATE_LIMIT)
 def rice_disease():
     img_array = preprocess_rice(_read_upload())
     model = _get_model("rice", lambda: joblib.load(RICE_MODEL))
@@ -292,6 +365,7 @@ def rice_disease():
 
 
 @app.post("/coffee-disease")
+@limiter.limit(RATE_LIMIT)
 def coffee_disease():
     img_array = preprocess_cnn(_read_upload())
     kind, model = _get_model("coffee", _load_coffee)
@@ -314,6 +388,11 @@ def handle_invalid_image(err: InvalidImage):
 @app.errorhandler(RequestEntityTooLarge)
 def handle_too_large(_err):
     return jsonify({"error": f"La imagen supera el tamaño máximo de {MAX_UPLOAD_MB} MB."}), 413
+
+
+@app.errorhandler(TooManyRequests)
+def handle_rate_limit(_err):
+    return jsonify({"error": "Has hecho demasiadas peticiones seguidas. Espera un minuto e inténtalo de nuevo."}), 429
 
 
 @app.errorhandler(FileNotFoundError)

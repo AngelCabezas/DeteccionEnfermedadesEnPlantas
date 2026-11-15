@@ -1,0 +1,10 @@
+venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+.ruff_cache/
+.env
+tests/
+scripts/
+# Los modelos Keras originales no se usan en producción (se sirven los .tflite).
+modelos/*.h5

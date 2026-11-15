@@ -1,6 +1,11 @@
+.det-page {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
 .det {
+  flex: 1;
   padding: var(--sp-5) 0 var(--sp-8);
-  min-height: calc(100vh - 64px);
 }
 
 /* ---------- Migas y cabecera ---------- */
@@ -126,7 +131,9 @@
   color: var(--color-ink-2);
   text-align: center;
   cursor: pointer;
-  transition: border-color var(--ease), background-color var(--ease);
+  transition:
+    border-color var(--ease),
+    background-color var(--ease);
 }
 .dropzone:hover,
 .dropzone.is-dragging,
@@ -229,7 +236,7 @@
   border-left-color: var(--color-danger);
 }
 .result--pest {
-  border-left-color: #c77a00;
+  border-left-color: var(--color-warning);
 }
 .result__title {
   font-size: var(--text-lg);
@@ -251,7 +258,7 @@
 .confidence__bar {
   height: 10px;
   border-radius: var(--radius-pill);
-  background: #dfe7e2;
+  background: var(--color-track);
   overflow: hidden;
 }
 .confidence__bar span {

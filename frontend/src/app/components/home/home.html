@@ -5,69 +5,171 @@
   <main id="contenido">
     <!-- ================= HERO ================= -->
     <section class="hero">
-      <div class="container hero__inner">
-        <img class="hero__logo" src="/img/Logo.png" alt="" width="140" height="140" />
-        <p class="hero__kicker">Plant Disease Detector IA</p>
-        <h1 class="hero__title">Detecta enfermedades en tus cultivos con una foto</h1>
-        <p class="hero__lead">
-          Sube una imagen de la hoja y la inteligencia artificial te dice si está sana o qué
-          enfermedad reconoce. Rápido, gratuito y pensado para el campo.
-        </p>
-        <div class="hero__actions">
-          @if (user()) {
-            <a class="btn btn-primary btn-lg" routerLink="/dashboard">Ir al diagnóstico</a>
-          } @else {
-            <a class="btn btn-primary btn-lg" routerLink="/login">Empezar ahora</a>
-          }
-          <a class="btn btn-ghost btn-lg" routerLink="/informacion">Conoce el proyecto</a>
+      <div class="container hero__grid">
+        <div class="hero__text">
+          <p class="hero__kicker">Plant Disease Detector IA</p>
+          <h1 class="hero__title">Detecta enfermedades en tus cultivos con una foto</h1>
+          <p class="hero__lead">
+            Sube una imagen de la hoja y la inteligencia artificial te dice si está sana o qué
+            enfermedad reconoce. Banano, arroz y café, en segundos y desde el móvil.
+          </p>
+          <div class="hero__actions">
+            @if (user()) {
+              <a class="btn btn-primary btn-lg" routerLink="/dashboard">Ir al diagnóstico</a>
+            } @else {
+              <a class="btn btn-primary btn-lg" routerLink="/login">Empezar gratis</a>
+            }
+            <a class="btn btn-ghost btn-lg" href="#como-funciona">Ver cómo funciona</a>
+          </div>
+          <ul class="hero__trust" aria-label="Características">
+            <li>Gratuito</li>
+            <li>Sin instalar nada</li>
+            <li>Tus fotos no se guardan</li>
+          </ul>
+        </div>
+
+        <!-- Demostración estática del flujo de diagnóstico -->
+        <div class="demo" aria-hidden="true">
+          <div class="demo__screen">
+            <img
+              src="/img/cultivo-banano.webp"
+              alt=""
+              width="1200"
+              height="686"
+              fetchpriority="high"
+            />
+            <span class="demo__scan"></span>
+            <span class="demo__chip"><span class="spinner"></span> Analizando hoja de banano…</span>
+          </div>
+          <div class="demo__result">
+            <span class="badge badge-danger">Enfermedad detectada</span>
+            <p class="demo__name">Sigatoka</p>
+            <p class="demo__desc">Estrías y manchas oscuras que reducen la fotosíntesis.</p>
+            <div class="demo__conf"><span>Confianza del modelo</span><strong>93 %</strong></div>
+            <div class="demo__track"><span></span></div>
+          </div>
         </div>
       </div>
     </section>
 
     <!-- ================= CULTIVOS ================= -->
-    <section class="crops-strip" aria-labelledby="cultivos-titulo">
+    <section class="crops" aria-labelledby="cultivos-titulo">
       <div class="container">
-        <h2 id="cultivos-titulo" class="section-title">Tres cultivos, tres modelos especializados</h2>
-        <div class="crops-strip__grid">
+        <div class="section-head">
+          <div>
+            <p class="section-kicker">Cultivos</p>
+            <h2 id="cultivos-titulo" class="section-title">
+              Tres cultivos, tres modelos especializados
+            </h2>
+          </div>
+          <p class="section-lead">
+            Cada modelo se entrenó con imágenes de hojas sanas y enfermas de un solo cultivo. Elige
+            el tuyo para empezar.
+          </p>
+        </div>
+
+        <div class="crops__grid">
           @for (crop of crops; track crop.id) {
-            <article class="crop-mini">
-              <img [src]="crop.image" [alt]="'Hojas de ' + crop.name" loading="lazy" />
-              <div>
+            <a class="crop-card" [routerLink]="'/' + crop.id">
+              <img
+                [src]="crop.image"
+                [alt]="'Hojas de ' + crop.name"
+                loading="lazy"
+                width="1200"
+                height="686"
+              />
+              <div class="crop-card__body">
                 <h3>{{ crop.name }}</h3>
                 <p>{{ crop.summary }}</p>
+                <ul class="crop-card__tags" aria-label="Detecta">
+                  @for (d of crop.detects; track d) {
+                    <li [class.is-healthy]="d === 'Hoja saludable'">{{ d }}</li>
+                  }
+                </ul>
+                <span class="crop-card__cta">
+                  Diagnosticar
+                  <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
+                    <path
+                      fill="currentColor"
+                      d="M12 4l-1.4 1.4 5.6 5.6H4v2h12.2l-5.6 5.6L12 20l8-8z"
+                    />
+                  </svg>
+                </span>
               </div>
-            </article>
+            </a>
           }
         </div>
       </div>
     </section>
 
     <!-- ================= CÓMO FUNCIONA ================= -->
-    <section class="how" aria-labelledby="como-titulo">
+    <section id="como-funciona" class="how" aria-labelledby="como-titulo">
       <div class="container">
-        <h2 id="como-titulo" class="section-title">Cómo funciona</h2>
-        <ol class="how__steps">
-          <li>
-            <span class="how__num" aria-hidden="true">1</span>
-            <h3>Elige el cultivo</h3>
-            <p>Banano, arroz o café. Cada uno tiene su propio modelo.</p>
-          </li>
-          <li>
-            <span class="how__num" aria-hidden="true">2</span>
-            <h3>Sube una foto de la hoja</h3>
-            <p>Desde tu teléfono o computador. JPG, PNG o WEBP.</p>
-          </li>
-          <li>
-            <span class="how__num" aria-hidden="true">3</span>
-            <h3>Recibe el diagnóstico</h3>
-            <p>Nombre de la enfermedad, descripción y nivel de confianza.</p>
-          </li>
+        <p class="section-kicker section-kicker--center">Proceso</p>
+        <h2 id="como-titulo" class="section-title section-title--center">Cómo funciona</h2>
+        <ol class="steps">
+          @for (step of steps; track step.title; let i = $index) {
+            <li>
+              <span class="steps__icon">
+                <svg viewBox="0 0 24 24" width="28" height="28" aria-hidden="true">
+                  <path fill="currentColor" [attr.d]="step.icon" />
+                </svg>
+                <span class="steps__num">{{ i + 1 }}</span>
+              </span>
+              <h3>{{ step.title }}</h3>
+              <p>{{ step.text }}</p>
+            </li>
+          }
         </ol>
+      </div>
+    </section>
+
+    <!-- ================= VENTAJAS ================= -->
+    <section class="why" aria-labelledby="why-titulo">
+      <div class="container why__grid">
+        <div class="why__intro">
+          <p class="section-kicker">Ventajas</p>
+          <h2 id="why-titulo" class="section-title">Pensado para usarse en el campo</h2>
+          <p class="section-lead">
+            Conexiones irregulares, pantallas pequeñas y poco tiempo: la herramienta se diseñó
+            partiendo de ese contexto, siguiendo criterios de usabilidad y accesibilidad (WCAG 2.1
+            AA).
+          </p>
+          <a class="btn btn-secondary" routerLink="/informacion">Conoce el proyecto</a>
+        </div>
+        <ul class="features">
+          @for (f of features; track f.title) {
+            <li>
+              <svg viewBox="0 0 24 24" width="26" height="26" aria-hidden="true">
+                <path fill="currentColor" [attr.d]="f.icon" />
+              </svg>
+              <div>
+                <h3>{{ f.title }}</h3>
+                <p>{{ f.text }}</p>
+              </div>
+            </li>
+          }
+        </ul>
+      </div>
+    </section>
+
+    <!-- ================= CTA FINAL ================= -->
+    <section class="cta">
+      <div class="container cta__inner">
+        <h2>¿Listo para revisar tus hojas?</h2>
+        <p>Crea una cuenta gratuita y obtén tu primer diagnóstico en menos de un minuto.</p>
+        @if (user()) {
+          <a class="btn btn-primary btn-lg" routerLink="/dashboard">Ir al diagnóstico</a>
+        } @else {
+          <a class="btn btn-primary btn-lg" routerLink="/login">Crear cuenta</a>
+        }
+        <small
+          >El resultado es orientativo y no sustituye la evaluación de un profesional
+          agrónomo.</small
+        >
       </div>
     </section>
   </main>
 
-  <footer class="home__footer">
-    <p>© 2026 Plant Disease Detector IA · Escuela Politécnica Nacional</p>
-  </footer>
+  <app-footer variant="dark" />
 </div>

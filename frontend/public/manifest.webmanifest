@@ -1,0 +1,14 @@
+{
+  "name": "Plant Disease Detector IA",
+  "short_name": "PlantDetector",
+  "description": "Detecta enfermedades en hojas de banano, arroz y café a partir de una fotografía.",
+  "lang": "es",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#eef3ef",
+  "theme_color": "#14522f",
+  "icons": [
+    { "src": "img/logo-256.png", "sizes": "256x256", "type": "image/png" },
+    { "src": "img/logo-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" }
+  ]
+}

@@ -1,0 +1,21 @@
+# Sistema operativo / editores
+.DS_Store
+Thumbs.db
+*.swp
+.idea/
+
+# Entornos y dependencias (cada subproyecto tiene además su propio .gitignore)
+node_modules/
+venv/
+.venv/
+__pycache__/
+
+# Salidas de compilación y caché
+dist/
+.angular/
+.pytest_cache/
+.ruff_cache/
+
+# Variables de entorno locales
+.env
+.env.local

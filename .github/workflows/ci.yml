@@ -1,0 +1,85 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+# Mínimo privilegio: el token del workflow solo puede leer el repositorio.
+permissions:
+  contents: read
+
+jobs:
+  backend:
+    name: Backend · lint y pruebas
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: backend
+    steps:
+      - uses: actions/checkout@v4
+        # Los modelos (Git LFS) no son necesarios: las pruebas usan modelos simulados.
+        with:
+          lfs: false
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version-file: backend/.python-version
+          cache: pip
+          cache-dependency-path: backend/requirements*.txt
+
+      - name: Instalar dependencias
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt pytest ruff
+
+      - name: Ruff (lint + formato)
+        run: |
+          ruff check .
+          ruff format --check .
+
+      - name: Pytest
+        run: python -m pytest
+
+      - name: Auditoría de dependencias (pip-audit)
+        # Audita el entorno ya instalado (evita reinstalar todo en un venv aparte).
+        run: |
+          pip install pip-audit
+          pip-audit
+
+  frontend:
+    name: Frontend · formato, pruebas y build
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: frontend
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          lfs: false
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+
+      - name: Instalar dependencias
+        run: npm ci
+
+      - name: Prettier
+        run: npm run format:check
+
+      - name: Pruebas unitarias
+        run: npm run test:ci
+
+      - name: Build de producción
+        run: npm run build
+
+      # Solo dependencias de ejecución: las de desarrollo (CLI) no llegan al navegador.
+      - name: Auditoría de dependencias (npm audit)
+        run: npm audit --omit=dev --audit-level=high
